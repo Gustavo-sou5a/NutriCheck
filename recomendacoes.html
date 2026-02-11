@@ -47,7 +47,9 @@
         const AT_RISK = 1; // the answer given by the person suggest that it can be at risk on this parameter 
 
         var riskFactors = [];
+        var i = 0;
         while (riskFactors.length < MAX_NUM_RECOMMENDATIONS && i < NUM_RISK_FACTORS) {
+          i = 0;
           if (answers[i] == AT_RISK) {
             riskFactors.push(i+1); // adds the index of the factor. if i=0, it means we're adding the information related to var1, which is sleep
           }
