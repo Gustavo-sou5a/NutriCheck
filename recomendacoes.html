@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Recomendações NutriCheck</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 30px; max-width: 700px; margin: auto; background: #f9f9f9; }
+  h1 { color: #2c3e50; text-align: center; }
+  h2 { color: #16a085; }
+  .card { background: #fff; padding: 20px; margin-top: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  p { font-size: 16px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<h1>As tuas recomendações NutriCheck</h1>
+<div id="resultado">
+  <p>A carregar as tuas recomendações…</p>
+</div>
+
+<script>
+// Função para ler parâmetros da URL
+function getParam(name) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(name);
+}
+
+// Obter respostas do Tally via URL
+const prioridade = getParam("prioridade");
+const idade = getParam("idade");
+const sexo = getParam("sexo");
+const atividade = getParam("atividade"); // exemplo de outra pergunta
+const objetivo = getParam("objetivo");   // exemplo de outra pergunta
+
+// Definir regras de recomendação
+const regras = {
+  "Melhorar a minha saúde.": "Plano de saúde geral e otimização metabólica: alimentação equilibrada, sono regular e exercícios moderados.",
+  "Perder peso e ganhar massa muscular.": "Plano de recomposição corporal: treino de força 3–4x/semana, dieta hiperproteica e controle calórico.",
+  "Aumentar a capacidade de concentração, produtividade e energia.": "Plano de nutrição para performance cognitiva: refeições equilibradas, hidratação adequada e suplementos estratégicos.",
+  "Melhorar a minha performance desportiva.": "Plano de performance atlética: treino estruturado, alimentação pré/pós-treino e monitorização de progresso.",
+  "Outro": "Plano personalizado geral com foco em hábitos saudáveis."
+};
+
+// Buscar recomendação baseada na prioridade
+const recomendacao = regras[prioridade] || "Plano personalizado geral";
+
+// Montar o HTML final
+const div = document.getElementById("resultado");
+div.innerHTML = `
+  <div class="card">
+    <p><b>Prioridade:</b> ${prioridade || "Não definida"}</p>
+    <p><b>Idade:</b> ${idade || "Não informada"}</p>
+    <p><b>Sexo:</b> ${sexo || "Não informado"}</p>
+    ${atividade ? `<p><b>Atividade:</b> ${atividade}</p>` : ""}
+    ${objetivo ? `<p><b>Objetivo:</b> ${objetivo}</p>` : ""}
+    <h2>Recomendação:</h2>
+    <p>${recomendacao}</p>
+  </div>
+`;
+</script>
+
+</body>
+</html>
