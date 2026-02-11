@@ -1,0 +1,66 @@
+// Função para ler parâmetros da URL
+function getParam(name) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(name);
+}
+
+// Obter respostas do Tally via URL
+const var1_sono = getParam("var1_sono");
+const var2_ativ = getParam("var2_ativ");
+const var3_alcool = getParam("var3_alcool");
+const var4_tabaco = getParam("var4_tabaco"); 
+const var5_fruta = getParam("var5_fruta");   
+const var6_refri = getParam("var6_refri");
+const var7_upf = getParam("var7_upf");
+const var8_horario = getParam("var8_horario");
+
+const answers = [var1_sono, var2_ativ, var3_alcool, var4_tabaco, var5_fruta, var6_refri, var7_upf, var8_horario];
+
+/**
+ * This function gets, at most, the numbers corresponding to the 5 most important risk factors (e.g., 1 represents var1_sono).
+ * @returns an array, that could be empty
+ **/
+function getMostRelevantRiskFactors() {
+  const MAX_NUM_RECOMMENDATIONS = 5;
+  const NUM_RISK_FACTORS = 8;
+  const AT_RISK = "1"; // the answer given by the person suggests that it can be at risk on this parameter 
+
+  var riskFactors = [];
+  var i = 0;
+  while (riskFactors.length < MAX_NUM_RECOMMENDATIONS && i < NUM_RISK_FACTORS) {
+    if (answers[i] === AT_RISK) {
+      riskFactors.push(i+1); // adds the index of the factor
+    }
+    i++;
+  }
+  return riskFactors;
+}
+
+const riskFactors = getMostRelevantRiskFactors();
+
+// Map each index to its corresponding recommendation phrase
+const frases = {
+  1: "Sono irregular: tente manter um horário regular de sono e dormir 7-9h por noite.",
+  2: "Atividade física insuficiente: inclua pelo menos 150 minutos de atividade moderada por semana.",
+  3: "Consumo elevado de álcool: reduza a ingestão para valores moderados ou abstinência.",
+  4: "Tabaco: parar de fumar traz benefícios imediatos para saúde cardiovascular e pulmonar.",
+  5: "Consumo insuficiente de frutas e vegetais: tente incluir pelo menos 5 porções por dia.",
+  6: "Consumo elevado de refrigerantes: reduza bebidas açucaradas e prefira água ou infusões.",
+  7: "Consumo de alimentos ultraprocessados elevado: prefira alimentos integrais e minimamente processados.",
+  8: "Horário irregular: tente manter horários de refeições e sono consistentes."
+};
+
+// Get phrases only for the factors present in riskFactors
+const recomendacoesFinais = riskFactors.map(index => frases[index]);
+
+// Build the final HTML
+const div = document.getElementById("resultado");
+div.innerHTML = `
+  <div class="card">
+    <h2>Recomendações Personalizadas:</h2>
+    ${recomendacoesFinais.length > 0 
+      ? recomendacoesFinais.map(f => `<p>${f}</p>`).join('') 
+      : '<p>Não foram detectados fatores de risco específicos.</p>'
+    }
+  </div>
+`;
