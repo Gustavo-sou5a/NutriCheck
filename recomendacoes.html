@@ -42,17 +42,18 @@
        * @returns an array, that could be empty
        **/
       function getMostRelevantRiskFactors() {
-        const MAX_NUM_RECOMMENDATIONS = 8; // we'll show all active risk factors
+        const MAX_NUM_RECOMMENDATIONS = 5;
         const NUM_RISK_FACTORS = 8;
-        const AT_RISK = "1"; // the answer given by the person suggests that it can be at risk on this parameter 
+        const AT_RISK = 1; // the answer given by the person suggest that it can be at risk on this parameter 
 
-        let riskFactors = [];
-        for (let i = 0; i < NUM_RISK_FACTORS; i++) {
-          if (answers[i] === AT_RISK) {
-            riskFactors.push(i + 1); // adds the index of the factor. if i=0, it means we're adding the information related to var1, which is sleep
+        var riskFactors = [];
+        while (riskFactors.length < MAX_NUM_RECOMMENDATIONS && i < NUM_RISK_FACTORS) {
+          if (answers[i] == AT_RISK) {
+            riskFactors.push(i+1); // adds the index of the factor. if i=0, it means we're adding the information related to var1, which is sleep
           }
+          i++;
         }
-        return riskFactors;
+        return riskFactors
       }
 
       const riskFactors = getMostRelevantRiskFactors();
