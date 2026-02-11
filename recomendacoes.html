@@ -1,63 +1,89 @@
 <!DOCTYPE html>
 <html lang="pt">
-<head>
-<meta charset="UTF-8">
-<title>Recomendações NutriCheck</title>
-<style>
-  body { font-family: Arial, sans-serif; padding: 30px; max-width: 700px; margin: auto; background: #f9f9f9; }
-  h1 { color: #2c3e50; text-align: center; }
-  h2 { color: #16a085; }
-  .card { background: #fff; padding: 20px; margin-top: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-  p { font-size: 16px; line-height: 1.5; }
-</style>
-</head>
-<body>
+  <head>
+  <meta charset="UTF-8">
+  <title>Recomendações NutriCheck</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; max-width: 700px; margin: auto; background: #f9f9f9; }
+    h1 { color: #2c3e50; text-align: center; }
+    h2 { color: #16a085; }
+    .card { background: #fff; padding: 20px; margin-top: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    p { font-size: 16px; line-height: 1.5; }
+  </style>
+  </head>
 
-<h1>As tuas recomendações NutriCheck</h1>
-<div id="resultado">
-  <p>A carregar as tuas recomendações…</p>
-</div>
+  <body>
+    <h1>As tuas recomendações NutriCheck</h1>
+    <div id="resultado">
+      <p>A carregar as tuas recomendações…</p>
+    </div>
 
-<script>
-// Função para ler parâmetros da URL
-function getParam(name) {
-  const url = new URL(window.location.href);
-  return url.searchParams.get(name);
-}
+    <script>
+      // Função para ler parâmetros da URL
+      function getParam(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+      }
 
-// Obter respostas do Tally via URL
-const prioridade = getParam("prioridade");
-const idade = getParam("idade");
-const sexo = getParam("sexo");
-const atividade = getParam("atividade"); // exemplo de outra pergunta
-const objetivo = getParam("objetivo");   // exemplo de outra pergunta
+      // Obter respostas do Tally via URL
+      const var1_sono = getParam("var1_sono");
+      const var2_ativ = getParam("var2_ativ");
+      const var3_alcool = getParam("var3_alcool");
+      const var4_tabaco = getParam("var4_tabaco"); 
+      const var5_fruta = getParam("var5_fruta");   
+      const var6_refri = getParam("var6_refri");
+      const var7_upf = getParam("var7_upf");
+      const var8_horario = getParam("var8_horario");
+      const answers = [var1_sono, var2_ativ, var3_alcool, var4_tabaco, var5_fruta, var6_refri, var7_upf, var8_horario];
 
-// Definir regras de recomendação
-const regras = {
-  "Melhorar a minha saúde.": "Plano de saúde geral e otimização metabólica: alimentação equilibrada, sono regular e exercícios moderados.",
-  "Perder peso e ganhar massa muscular.": "Plano de recomposição corporal: treino de força 3–4x/semana, dieta hiperproteica e controle calórico.",
-  "Aumentar a capacidade de concentração, produtividade e energia.": "Plano de nutrição para performance cognitiva: refeições equilibradas, hidratação adequada e suplementos estratégicos.",
-  "Melhorar a minha performance desportiva.": "Plano de performance atlética: treino estruturado, alimentação pré/pós-treino e monitorização de progresso.",
-  "Outro": "Plano personalizado geral com foco em hábitos saudáveis."
-};
+      
+      /**
+       * This function gets, at most, the numbers corresponding to the 5 most important risk factors (e.g., 1 represents var1_sono).
+       * @returns an array, that could be empty
+       **/
+      function getMostRelevantRiskFactors() {
+        const MAX_NUM_RECOMMENDATIONS = 5;
+        const NUM_RISK_FACTORS = 8;
+        const AT_RISK = 1; // the answer given by the person suggest that it can be at risk on this parameter 
 
-// Buscar recomendação baseada na prioridade
-const recomendacao = regras[prioridade] || "Plano personalizado geral";
+        var riskFactors = [];
+        while (riskFactors.length < MAX_NUM_RECOMMENDATIONS && i < NUM_RISK_FACTORS) {
+          if (answers[i] == AT_RISK) {
+            riskFactors.push(i+1); // adds the index of the factor. if i=0, it means we're adding the information related to var1, which is sleep
+          }
+          i++;
+        }
+        return riskFactors
+      }
 
-// Montar o HTML final
-const div = document.getElementById("resultado");
-div.innerHTML = `
-  <div class="card">
-    <p><b>Prioridade:</b> ${prioridade || "Não definida"}</p>
-    <p><b>Idade:</b> ${idade || "Não informada"}</p>
-    <p><b>Sexo:</b> ${sexo || "Não informado"}</p>
-    ${atividade ? `<p><b>Atividade:</b> ${atividade}</p>` : ""}
-    ${objetivo ? `<p><b>Objetivo:</b> ${objetivo}</p>` : ""}
-    <h2>Recomendação:</h2>
-    <p>${recomendacao}</p>
-  </div>
-`;
-</script>
+      const riskFactors = getMostRelevantRiskFactors();
 
-</body>
+      // Definir regras de recomendação
+      const regras = {
+        "Melhorar a minha saúde.": "Plano de saúde geral e otimização metabólica: alimentação equilibrada, sono regular e exercícios moderados.",
+        "Perder peso e ganhar massa muscular.": "Plano de recomposição corporal: treino de força 3–4x/semana, dieta hiperproteica e controle calórico.",
+        "Aumentar a capacidade de concentração, produtividade e energia.": "Plano de nutrição para performance cognitiva: refeições equilibradas, hidratação adequada e suplementos estratégicos.",
+        "Melhorar a minha performance desportiva.": "Plano de performance atlética: treino estruturado, alimentação pré/pós-treino e monitorização de progresso.",
+        "Outro": "Plano personalizado geral com foco em hábitos saudáveis."
+      };
+
+      // Buscar recomendação baseada na prioridade
+      const recomendacao = "Plano personalizado geral";
+
+      // Montar o HTML final
+      const div = document.getElementById("resultado");
+      div.innerHTML = `
+        <div class="card">
+          <p><b>Prioridade:</b> ${riskFactors[0] || "Não definida"}</p>
+          <p><b>Idade:</b> ${riskFactors[1] || "Não informada"}</p>
+          <p><b>Sexo:</b> ${riskFactors[2] || "Não informado"}</p>
+          ${riskFactors[3] ? `<p><b>Atividade:</b> ${riskFactors[3]}</p>` : ""}
+          ${riskFactors[4] ? `<p><b>Objetivo:</b> ${riskFactors[4]}</p>` : ""}
+          <h2>Recomendação:</h2>
+          <p>${recomendacao}</p>
+        </div>
+      `;
+    </script>
+
+  </body>
 </html>
