@@ -38,10 +38,12 @@ h2 {
 
 .bloco {
   border-left: 4px solid #2a9d8f;
-  background: #f9fdfd;
+  border-bottom: 4px solid #2a9d8f;
+  background: #e9f8f8;
   padding: 15px 20px;
   margin-top: 25px;
   border-radius: 10px;
+
   transition: background 0.3s ease;
 }
 
@@ -50,9 +52,10 @@ h2 {
 }
 
 .bloco h3 {
-  margin-bottom: 8px;
+
+  margin-bottom: 20px;
   color: #264653;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
 }
 
 .bloco p {
@@ -76,6 +79,10 @@ p strong {
   color: #1b4332;
 }
 
+h3 em {
+  color:rgb(50, 56, 55);
+}
+
 /* Responsivo */
 @media (max-width: 600px) {
   body {
@@ -91,3 +98,4 @@ p strong {
     font-size: 1.1rem;
   }
 }
+

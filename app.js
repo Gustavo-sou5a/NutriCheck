@@ -130,15 +130,15 @@ if (riskFactors.length === 0) {
   html += `
     <h2>Manutenção de Hábitos</h2>
     <p>De acordo com as suas respostas, <b>os seus hábitos atuais estão bem alinhados com as recomendações para a saúde.</b></p>
-    <p>O foco neste momento é manter este estilo de vida saudável ao longo do tempo, mesmo perante mudanças de rotina ou fases mais exigentes.</p>
-    <p>Este Ponto de Partida serve para reforçar o que já faz bem e apoiar escolhas consistentes no dia a dia. Consultas de nutrição, ações educativas e workshops práticos podem ser úteis para aprofundar conhecimento, esclarecer dúvidas e apoiar a manutenção destes hábitos.</p>
-    <p>Se considera importante continuar a investir na sua saúde, partilhe este interesse com a sua empresa.</p>
+    <p>O foco neste momento é <b>manter este estilo de vida saudável</b> ao longo do tempo, mesmo perante mudanças de rotina ou fases mais exigentes.</p>
+    <p>Este <b>Ponto de Partida</b> serve para <b>reforçar o que já faz bem</b> e apoiar escolhas consistentes no dia a dia. <b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> podem ser úteis para aprofundar conhecimento, esclarecer dúvidas e apoiar a manutenção destes hábitos.</p>
+    <p>Se considera importante continuar a <b>investir na sua saúde</b>, partilhe este interesse com a sua empresa.</p>
   `;
 
 } else {
 
-  html += `<h2>Recomendações Práticas</h2>
-  <h4>As recomendações apresentadas abaixo foram selecionadas porque representam áreas com maior potencial de melhoria neste momento.</h4>`;
+  html += `<h2><span>Recomendações Práticas<span></h2>
+  <h3><em>As recomendações apresentadas abaixo foram selecionadas porque representam áreas com maior potencial de melhoria neste momento.</em></h3>`;
 
   riskFactors.forEach(index => {
     const info = factorsInfo[index];
@@ -159,9 +159,10 @@ if (riskFactors.length === 0) {
    html += `
     <div class="bloco">
       <h3>O próximo passo:</h3>
-      <p>O desafio que temos para si não é mudar tudo de uma vez — começar por uma ou duas destas prioridades já é um excelente primeiro passo.</p>
-      <p>Este Ponto de Partida é apenas o início: o acompanhamento adequado ajuda a transformar recomendações em hábitos sustentáveis ao longo do tempo. Consultas de nutrição, ações educativas e workshops práticos são formas eficazes de aprofundar estas áreas e apoiar mudanças ajustadas ao dia a dia.</p>
-      <p>Se considera importante avançar neste caminho, partilhe este interesse com a sua empresa!</p>
+      <p><b>O desafio que temos para si</b> não é mudar tudo de uma vez — <b>começar por uma ou duas destas prioridades</b> já é um excelente primeiro passo.</p>
+      <p>Este <b>Ponto de Partida</b> é apenas o início: o acompanhamento adequado ajuda a transformar recomendações em hábitos sustentáveis ao longo do tempo. 
+      <b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> são formas eficazes de aprofundar estas áreas e apoiar mudanças ajustadas ao dia a dia.</p>
+      <p>Se considera importante avançar neste caminho, <b>partilhe este interesse com a sua empresa!</b></p>
     </div>
   `;
 
