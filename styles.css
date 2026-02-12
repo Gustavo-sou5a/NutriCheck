@@ -1,44 +1,93 @@
 body {
-  font-family: Arial, sans-serif;
-  padding: 30px;
-  max-width: 700px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  max-width: 900px;
   margin: auto;
-  background: #f9f9f9;
+  background: #f0f4f8;
+  color: #333;
 }
 
 h1 {
-  color: #2c3e50;
+  color: #1f3b4d;
   text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
 }
 
 h2 {
-  color: #16a085;
+  color: #2a9d8f;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  border-bottom: 3px solid #2a9d8f;
+  padding-bottom: 5px;
 }
 
 .card {
-  background: #fff;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  background: #ffffff;
+  padding: 25px 30px;
+  margin-top: 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-p {
-  font-size: 16px;
-  line-height: 1.5;
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.18);
 }
 
 .bloco {
-  border-top: 1px solid #eee;
-  padding-top: 15px;
-  margin-top: 20px;
+  border-left: 4px solid #2a9d8f;
+  background: #f9fdfd;
+  padding: 15px 20px;
+  margin-top: 25px;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.bloco:hover {
+  background: #e0f7f4;
 }
 
 .bloco h3 {
-  margin-bottom: 5px;
-  color: #2c3e50;
+  margin-bottom: 8px;
+  color: #264653;
+  font-size: 1.3rem;
+}
+
+.bloco p {
+  margin: 6px 0;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 ul {
-  padding-left: 20px;
+  padding-left: 25px;
+  margin-top: 5px;
+}
+
+li {
+  margin: 8px 0;
+  font-size: 0.97rem;
+  line-height: 1.5;
+}
+
+p strong {
+  color: #1b4332;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  body {
+    padding: 15px;
+  }
+  h1 {
+    font-size: 1.8rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  .bloco h3 {
+    font-size: 1.1rem;
+  }
 }
