@@ -17,19 +17,19 @@ const var8_horario = getParam("var8_horario");
 const answers = [var1_sono, var2_ativ, var3_alcool, var4_tabaco, var5_fruta, var6_refri, var7_upf, var8_horario];
 
 /**
- * This function gets, at most, the numbers corresponding to the 5 most important risk factors (e.g., 1 represents var1_sono).
- * @returns an array, that could be empty
- **/
+ * This function gets, at most, the numbers corresponding to the 5 most important risk factors.
+ */
 function getMostRelevantRiskFactors() {
   const MAX_NUM_RECOMMENDATIONS = 5;
   const NUM_RISK_FACTORS = 8;
-  const AT_RISK = "1"; // the answer given by the person suggests that it can be at risk on this parameter 
+  const AT_RISK = "1";
 
   var riskFactors = [];
   var i = 0;
+
   while (riskFactors.length < MAX_NUM_RECOMMENDATIONS && i < NUM_RISK_FACTORS) {
     if (answers[i] === AT_RISK) {
-      riskFactors.push(i+1); // adds the index of the factor
+      riskFactors.push(i+1);
     }
     i++;
   }
@@ -38,83 +38,89 @@ function getMostRelevantRiskFactors() {
 
 const riskFactors = getMostRelevantRiskFactors();
 
-// detailed recommendations for each factor
 const factorsInfo = {
+
   1: {
     title: "Sono",
-    why: "Dormir pouco ou de forma irregular duplica o risco de diabetes tipo 2.",
+    why: "Dormir pouco ou de forma irregular duplica o risco de desenvolver diabetes tipo 2, estando também associado a alterações metabólicas e pior controlo da glicemia.",
     todo: [
-      "Deite-se e acorde a horas semelhantes.",
-      "Evite ecrãs e refeições pesadas antes de dormir.",
-      "Mantenha ambiente escuro e silencioso."
+      "Tente deitar-se e acordar a horas semelhantes, mesmo nos dias livres.",
+      "Evite refeições pesadas, álcool e ecrãs luminosos na última hora antes de dormir.",
+      "Se trabalha por turnos, mantenha rotinas consistentes e um ambiente de sono adequado (escuro e silencioso)."
     ]
   },
+
   2: {
     title: "Atividade Física e Sedentarismo",
-    why: "A atividade física reduz o risco cardiovascular e metabólico em 30-50%. Longos períodos sentado têm impacto negativo.",
+    why: "A atividade física regular reduz o risco de doenças cardiovasculares, diabetes tipo 2 e mortalidade precoce em 30-50%, quando comparada com estilos de vida sedentários. Longos períodos sentado têm impacto negativo mesmo em pessoas fisicamente ativas.",
     todo: [
-      "Use escadas e mova-se nas pausas.",
-      "Levante-se a cada 60–90 minutos.",
-      "Caminhe 30 minutos por dia."
+      "Sempre que possível, use as escadas e aproveite chamadas ou pausas para se mover (caminhar, alongar).",
+      "Interrompa períodos longos sentado(a): levante-se a cada 60–90 minutos, nem que seja por alguns minutos.",
+      "Fora do trabalho, caminhe cerca de 30 minutos por dia, 5 dias por semana."
     ]
   },
+
   3: {
     title: "Consumo de Álcool",
-    why: "Mesmo consumos baixos estão associados a maior risco metabólico e hepático.",
+    why: "Não existe um nível de consumo de álcool considerado totalmente seguro, estando mesmo consumos baixos associados a maior risco de doença hepática, metabólica e alguns cancros.",
     todo: [
-      "Prefira bebidas sem álcool.",
-      "Reserve para ocasiões pontuais.",
-      "Alterne sempre com água."
+      "Prefira bebidas sem álcool em contextos sociais (água com gás, água aromatizada, bebidas zero açúcar).",
+      "Se consumir álcool, reserve-o para ocasiões pontuais e preferencialmente durante as refeições.",
+      "Alterne sempre com água e evite consumo frequente durante a semana."
     ]
   },
+
   4: {
     title: "Tabaco",
-    why: "Duplica ou triplica o risco cardiovascular e aumenta mortalidade precoce.",
+    why: "Fumar duplica ou triplica o risco de doença cardiovascular e leva à morte prematura de cerca de 1 em cada 2 fumadores a longo prazo.",
     todo: [
-      "Reduzir já traz benefícios.",
-      "Procure apoio médico.",
-      "Substitua a pausa por caminhada."
+      "Reduzir já traz benefícios imediatos para a saúde.",
+      "Procure apoio médico ou programas de cessação tabágica.",
+      "Substitua a pausa para fumar por uma pequena caminhada."
     ]
   },
+
   5: {
     title: "Consumo de Fruta e Vegetais",
-    why: "Reduz cerca de 30% do risco cardiovascular e melhora saúde intestinal.",
+    why: "Uma ingestão adequada de fruta e vegetais está associada a uma redução de cerca de 30% no risco de doença cardiovascular, melhor saúde intestinal e maior longevidade.",
     todo: [
-      "Inclua legumes no prato.",
-      "Coma fruta 2x/dia.",
-      "Prepare marmitas equilibradas."
+      "Inclua legumes no prato principal (sopa, salada ou legumes cozinhados).",
+      "Consuma fruta em pelo menos dois momentos do dia, como lanche ou sobremesa.",
+      "Cozinhe legumes ou sopa para a semana e prepare marmitas que incluam fruta e legumes em todas as refeições principais."
     ]
   },
+
   6: {
     title: "Bebidas Açucaradas",
-    why: "Aumentam risco de diabetes tipo 2 e ganho de peso.",
+    why: "O consumo diário de bebidas açucaradas aumenta o risco de diabetes tipo 2 em cerca de 25% por cada bebida ingerida por dia, contribuindo também para aumento de peso e alterações metabólicas.",
     todo: [
-      "Substitua por água ou chá sem açúcar.",
-      "Reduza gradualmente.",
-      "Tenha água sempre acessível."
+      "Substitua refrigerantes e sumos por água, água com gás ou chá sem açúcar.",
+      "Se o consumo for habitual, reduza de forma gradual.",
+      "Tenha sempre uma garrafa de água acessível durante o dia de trabalho."
     ]
   },
+
   7: {
     title: "Alimentos Ultraprocessados",
-    why: "Associados a maior ingestão calórica e risco cardiovascular.",
+    why: "O consumo frequente de alimentos ultraprocessados está associado a maior ingestão calórica espontânea, ganho de peso significativo em poucos dias e a um aumento relevante do risco de doença cardiovascular. Estes efeitos estão ligados à composição destes alimentos, ricos em açúcares, gorduras e aditivos e pobres em fibra e micronutrientes.",
     todo: [
-      "Prefira ingredientes simples.",
-      "Troque snacks por fruta ou iogurte.",
-      "Evite fritos e molhos processados."
+      "Use as regras práticas: se não conseguir identificar os ingredientes principais, evite e quanto menos ingredientes e menor o  rótulo, melhor.",
+      "Em lanches no trabalho, troque bolachas, pastelaria ou snacks de pacote por fruta, iogurte natural ou um punhado pequeno de frutos secos.",
+      "Em refeições fora, escolha pratos com alimentos reconhecíveis (ex.: carne ou peixe grelhado, legumes, arroz ou batata) e evite molhos, fritos e combinações muito processadas."
     ]
   },
+
   8: {
     title: "Horário de Trabalho",
-    why: "Turnos exigem maior atenção ao sono e alimentação.",
+    why: "Horários por turnos exigem uma maior atenção à gestão do sono, da alimentação e da energia ao longo do dia. A evidência mostra que, nestes contextos, estratégias adequadas de organização de rotinas ajudam a preservar o bem-estar metabólico e cardiovascular ao longo do tempo.",
     todo: [
-      "Prefira refeições leves.",
-      "Planeie lanches antes do turno.",
-      "Mantenha rotinas de descanso."
+      "Durante turnos noturnos ou horários irregulares, privilegie refeições mais leves e simples, evitando grandes quantidades de doces, fritos ou fast food.",
+      "Planeie refeições e lanches antes do turno para evitar escolhas impulsivas.",
+      "Sempre que possível, mantenha rotinas consistentes de descanso e um ambiente adequado ao sono (escuro e silencioso), ajustado ao seu horário."
     ]
   }
 };
 
-// Build the final HTML
 const div = document.getElementById("resultado");
 
 let html = `<div class="card">`;
@@ -129,7 +135,8 @@ if (riskFactors.length === 0) {
 
 } else {
 
-  html += `<h2>Recomendações Personalizadas:</h2>`;
+  html += `<h2>Recomendações Práticas</h2>
+  <p>As recomendações apresentadas abaixo foram selecionadas porque representam áreas com maior potencial de melhoria neste momento.</p>`;
 
   riskFactors.forEach(index => {
     const info = factorsInfo[index];
@@ -139,6 +146,7 @@ if (riskFactors.length === 0) {
       <div class="bloco">
         <h3>${info.title}</h3>
         <p><strong>Porque é importante:</strong> ${info.why}</p>
+        <p><strong>O que pode fazer no dia a dia:</strong></p>
         <ul>
           ${info.todo.map(item => `<li>${item}</li>`).join("")}
         </ul>
@@ -149,5 +157,4 @@ if (riskFactors.length === 0) {
 }
 
 html += `</div>`;
-
 div.innerHTML = html;
