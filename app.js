@@ -38,29 +38,116 @@ function getMostRelevantRiskFactors() {
 
 const riskFactors = getMostRelevantRiskFactors();
 
-// Map each index to its corresponding recommendation phrase
-const frases = {
-  1: "Sono irregular: tente manter um horário regular de sono e dormir 7-9h por noite.",
-  2: "Atividade física insuficiente: inclua pelo menos 150 minutos de atividade moderada por semana.",
-  3: "Consumo elevado de álcool: reduza a ingestão para valores moderados ou abstinência.",
-  4: "Tabaco: parar de fumar traz benefícios imediatos para saúde cardiovascular e pulmonar.",
-  5: "Consumo insuficiente de frutas e vegetais: tente incluir pelo menos 5 porções por dia.",
-  6: "Consumo elevado de refrigerantes: reduza bebidas açucaradas e prefira água ou infusões.",
-  7: "Consumo de alimentos ultraprocessados elevado: prefira alimentos integrais e minimamente processados.",
-  8: "Horário irregular: tente manter horários de refeições e sono consistentes."
+// Conteúdo detalhado dos fatores
+const fatoresInfo = {
+  1: {
+    titulo: "Sono",
+    porque: "Dormir pouco ou de forma irregular duplica o risco de diabetes tipo 2.",
+    fazer: [
+      "Deite-se e acorde a horas semelhantes.",
+      "Evite ecrãs e refeições pesadas antes de dormir.",
+      "Mantenha ambiente escuro e silencioso."
+    ]
+  },
+  2: {
+    titulo: "Atividade Física e Sedentarismo",
+    porque: "A atividade física reduz o risco cardiovascular e metabólico em 30-50%. Longos períodos sentado têm impacto negativo.",
+    fazer: [
+      "Use escadas e mova-se nas pausas.",
+      "Levante-se a cada 60–90 minutos.",
+      "Caminhe 30 minutos por dia."
+    ]
+  },
+  3: {
+    titulo: "Consumo de Álcool",
+    porque: "Mesmo consumos baixos estão associados a maior risco metabólico e hepático.",
+    fazer: [
+      "Prefira bebidas sem álcool.",
+      "Reserve para ocasiões pontuais.",
+      "Alterne sempre com água."
+    ]
+  },
+  4: {
+    titulo: "Tabaco",
+    porque: "Duplica ou triplica o risco cardiovascular e aumenta mortalidade precoce.",
+    fazer: [
+      "Reduzir já traz benefícios.",
+      "Procure apoio médico.",
+      "Substitua a pausa por caminhada."
+    ]
+  },
+  5: {
+    titulo: "Consumo de Fruta e Vegetais",
+    porque: "Reduz cerca de 30% do risco cardiovascular e melhora saúde intestinal.",
+    fazer: [
+      "Inclua legumes no prato.",
+      "Coma fruta 2x/dia.",
+      "Prepare marmitas equilibradas."
+    ]
+  },
+  6: {
+    titulo: "Bebidas Açucaradas",
+    porque: "Aumentam risco de diabetes tipo 2 e ganho de peso.",
+    fazer: [
+      "Substitua por água ou chá sem açúcar.",
+      "Reduza gradualmente.",
+      "Tenha água sempre acessível."
+    ]
+  },
+  7: {
+    titulo: "Alimentos Ultraprocessados",
+    porque: "Associados a maior ingestão calórica e risco cardiovascular.",
+    fazer: [
+      "Prefira ingredientes simples.",
+      "Troque snacks por fruta ou iogurte.",
+      "Evite fritos e molhos processados."
+    ]
+  },
+  8: {
+    titulo: "Horário de Trabalho",
+    porque: "Turnos exigem maior atenção ao sono e alimentação.",
+    fazer: [
+      "Prefira refeições leves.",
+      "Planeie lanches antes do turno.",
+      "Mantenha rotinas de descanso."
+    ]
+  }
 };
-
-// Get phrases only for the factors present in riskFactors
-const recomendacoesFinais = riskFactors.map(index => frases[index]);
 
 // Build the final HTML
 const div = document.getElementById("resultado");
-div.innerHTML = `
-  <div class="card">
-    <h2>Recomendações Personalizadas:</h2>
-    ${recomendacoesFinais.length > 0 
-      ? recomendacoesFinais.map(f => `<p>${f}</p>`).join('') 
-      : '<p>Não foram detectados fatores de risco específicos.</p>'
-    }
-  </div>
-`;
+
+let html = `<div class="card">`;
+
+if (riskFactors.length === 0) {
+
+  html += `
+    <h2>Manutenção de Hábitos</h2>
+    <p>De acordo com as suas respostas, os seus hábitos atuais estão bem alinhados com as recomendações para a saúde.</p>
+    <p>O foco neste momento é manter este estilo de vida saudável ao longo do tempo.</p>
+  `;
+
+} else {
+
+  html += `<h2>Recomendações Personalizadas:</h2>`;
+
+  riskFactors.forEach(index => {
+    const info = fatoresInfo[index];
+    if (!info) return;
+
+    html += `
+      <div class="bloco">
+        <h3>${info.titulo}</h3>
+        <p><strong>Porque é importante:</strong> ${info.porque}</p>
+        <ul>
+          ${info.fazer.map(item => `<li>${item}</li>`).join("")}
+        </ul>
+      </div>
+    `;
+  });
+
+}
+
+html += `</div>`;
+
+div.innerHTML = html;
