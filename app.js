@@ -38,75 +38,75 @@ function getMostRelevantRiskFactors() {
 
 const riskFactors = getMostRelevantRiskFactors();
 
-// Conteúdo detalhado dos fatores
-const fatoresInfo = {
+// detailed recommendations for each factor
+const factorsInfo = {
   1: {
-    titulo: "Sono",
-    porque: "Dormir pouco ou de forma irregular duplica o risco de diabetes tipo 2.",
-    fazer: [
+    title: "Sono",
+    why: "Dormir pouco ou de forma irregular duplica o risco de diabetes tipo 2.",
+    todo: [
       "Deite-se e acorde a horas semelhantes.",
       "Evite ecrãs e refeições pesadas antes de dormir.",
       "Mantenha ambiente escuro e silencioso."
     ]
   },
   2: {
-    titulo: "Atividade Física e Sedentarismo",
-    porque: "A atividade física reduz o risco cardiovascular e metabólico em 30-50%. Longos períodos sentado têm impacto negativo.",
-    fazer: [
+    title: "Atividade Física e Sedentarismo",
+    why: "A atividade física reduz o risco cardiovascular e metabólico em 30-50%. Longos períodos sentado têm impacto negativo.",
+    todo: [
       "Use escadas e mova-se nas pausas.",
       "Levante-se a cada 60–90 minutos.",
       "Caminhe 30 minutos por dia."
     ]
   },
   3: {
-    titulo: "Consumo de Álcool",
-    porque: "Mesmo consumos baixos estão associados a maior risco metabólico e hepático.",
-    fazer: [
+    title: "Consumo de Álcool",
+    why: "Mesmo consumos baixos estão associados a maior risco metabólico e hepático.",
+    todo: [
       "Prefira bebidas sem álcool.",
       "Reserve para ocasiões pontuais.",
       "Alterne sempre com água."
     ]
   },
   4: {
-    titulo: "Tabaco",
-    porque: "Duplica ou triplica o risco cardiovascular e aumenta mortalidade precoce.",
-    fazer: [
+    title: "Tabaco",
+    why: "Duplica ou triplica o risco cardiovascular e aumenta mortalidade precoce.",
+    todo: [
       "Reduzir já traz benefícios.",
       "Procure apoio médico.",
       "Substitua a pausa por caminhada."
     ]
   },
   5: {
-    titulo: "Consumo de Fruta e Vegetais",
-    porque: "Reduz cerca de 30% do risco cardiovascular e melhora saúde intestinal.",
-    fazer: [
+    title: "Consumo de Fruta e Vegetais",
+    why: "Reduz cerca de 30% do risco cardiovascular e melhora saúde intestinal.",
+    todo: [
       "Inclua legumes no prato.",
       "Coma fruta 2x/dia.",
       "Prepare marmitas equilibradas."
     ]
   },
   6: {
-    titulo: "Bebidas Açucaradas",
-    porque: "Aumentam risco de diabetes tipo 2 e ganho de peso.",
-    fazer: [
+    title: "Bebidas Açucaradas",
+    why: "Aumentam risco de diabetes tipo 2 e ganho de peso.",
+    todo: [
       "Substitua por água ou chá sem açúcar.",
       "Reduza gradualmente.",
       "Tenha água sempre acessível."
     ]
   },
   7: {
-    titulo: "Alimentos Ultraprocessados",
-    porque: "Associados a maior ingestão calórica e risco cardiovascular.",
-    fazer: [
+    title: "Alimentos Ultraprocessados",
+    why: "Associados a maior ingestão calórica e risco cardiovascular.",
+    todo: [
       "Prefira ingredientes simples.",
       "Troque snacks por fruta ou iogurte.",
       "Evite fritos e molhos processados."
     ]
   },
   8: {
-    titulo: "Horário de Trabalho",
-    porque: "Turnos exigem maior atenção ao sono e alimentação.",
-    fazer: [
+    title: "Horário de Trabalho",
+    why: "Turnos exigem maior atenção ao sono e alimentação.",
+    todo: [
       "Prefira refeições leves.",
       "Planeie lanches antes do turno.",
       "Mantenha rotinas de descanso."
@@ -132,15 +132,15 @@ if (riskFactors.length === 0) {
   html += `<h2>Recomendações Personalizadas:</h2>`;
 
   riskFactors.forEach(index => {
-    const info = fatoresInfo[index];
+    const info = factorsInfo[index];
     if (!info) return;
 
     html += `
       <div class="bloco">
-        <h3>${info.titulo}</h3>
-        <p><strong>Porque é importante:</strong> ${info.porque}</p>
+        <h3>${info.title}</h3>
+        <p><strong>Porque é importante:</strong> ${info.why}</p>
         <ul>
-          ${info.fazer.map(item => `<li>${item}</li>`).join("")}
+          ${info.todo.map(item => `<li>${item}</li>`).join("")}
         </ul>
       </div>
     `;
