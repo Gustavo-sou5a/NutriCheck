@@ -54,7 +54,7 @@ if(riskFactors.length === 0){
     <p>De acordo com as suas respostas, <b>os seus hábitos atuais estão bem alinhados com as recomendações para a saúde.</b></p>
     <p>O foco neste momento é <b>manter este estilo de vida saudável</b> ao longo do tempo, mesmo perante mudanças de rotina ou fases mais exigentes.</p>
     <p>Este <b>Ponto de Partida</b> serve para <b>reforçar o que já faz bem</b> e apoiar escolhas consistentes no dia a dia. <b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> podem ser úteis para aprofundar conhecimento, esclarecer dúvidas e apoiar a manutenção destes hábitos.</p>
-    <p>Se considera importante continuar a <b>investir na sua saúde</b>, partilhe este interesse com a sua empresa.</p>
+    <p>Se considera importante continuar a <b>investir na sua saúde</b>, partilhe este interesse com a sua empresa!</p>
   </div>`;
 }
 
