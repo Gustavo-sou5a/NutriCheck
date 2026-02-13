@@ -73,9 +73,8 @@ if(riskFactors.length>0){
              </div>`;
   });
 
-  html += `</div></div>`; // fecha container e card
+  html += `</div></div>`;
 
-  // Próximo Passo
   html += `<div class="card">
     <h2>O Próximo Passo</h2>
     <p><b>O desafio que temos para si</b> não é mudar tudo de uma vez — <b>começar por uma ou duas destas prioridades</b> já é um excelente primeiro passo.</p>
@@ -87,7 +86,7 @@ if(riskFactors.length>0){
 
 div.innerHTML = html;
 
-// ===== MODAL =====
+// modal
 const modal = document.getElementById("modal");
 const modalBody = document.getElementById("modalBody");
 const closeModal = document.getElementById("closeModal");
@@ -97,7 +96,6 @@ document.querySelectorAll(".clickable").forEach(card=>{
     const idx = card.dataset.index;
     const info = factorsInfo[idx];
 
-    // Accordion aberto por default
     let accordionHTML = '';
     info.todo.forEach((item,i)=>{
       accordionHTML += `<div class="accordion-item active">
@@ -109,13 +107,12 @@ document.querySelectorAll(".clickable").forEach(card=>{
     modalBody.innerHTML = `<h2>${info.title}</h2>
                            <h3>Porque é importante:</h3>
                            <p>${info.why}</p>
-                           <h3>O que pode fazer:</h3>
+                           <h3>O que pode fazer no dia a dia:</h3>
                            ${accordionHTML}`;
 
     modal.classList.add("show");
     document.body.classList.add("modal-open");
 
-    // Accordion toggle
     modalBody.querySelectorAll(".accordion-header").forEach(header=>{
       header.addEventListener("click",()=>{
         header.parentElement.classList.toggle("active");
@@ -132,3 +129,45 @@ function closeModalFunc(){
 closeModal.addEventListener("click",closeModalFunc);
 window.addEventListener("click", e=>{ if(e.target===modal) closeModalFunc(); });
 window.addEventListener("keydown", e=>{ if(e.key==="Escape" && modal.classList.contains("show")) closeModalFunc(); });
+
+
+// download button
+if (riskFactors.length > 0) {
+
+  const btn = document.createElement("button");
+  btn.className = "download-btn";
+  btn.textContent = "Baixar recomendações";
+
+  // mete logo a seguir ao conteúdo
+  div.after(btn);
+
+  btn.addEventListener("click", () => {
+
+    let texto = "RECOMENDAÇÕES PERSONALIZADAS\n";
+    texto += "===========================\n\n";
+
+    riskFactors.forEach(index => {
+      const info = factorsInfo[index];
+
+      texto += info.title.toUpperCase() + "\n";
+      texto += "---------------------------\n";
+      texto += "Porque é importante:\n";
+      texto += info.why + "\n\n";
+
+      texto += "O que pode fazer no dia a dia:\n";
+      info.todo.forEach((item, i) => {
+        texto += "- " + item + "\n";
+      });
+
+      texto += "\n\n";
+    });
+
+    const blob = new Blob([texto], { type: "text/plain;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "recomendacoes_nutricheck.txt";
+    link.click();
+
+    URL.revokeObjectURL(link.href);
+  });
+}
