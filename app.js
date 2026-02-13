@@ -136,10 +136,11 @@ if (riskFactors.length > 0) {
 
   const btn = document.createElement("button");
   btn.className = "download-btn";
-  btn.textContent = "Baixar recomendações";
+  btn.textContent = "Baixar Recomendações";
 
-  // mete logo a seguir ao conteúdo
-  div.after(btn);
+  const recomendacoesCard = document.querySelector("#resultado .card");
+  recomendacoesCard.insertAdjacentElement("afterend", btn);
+
 
   btn.addEventListener("click", () => {
 
