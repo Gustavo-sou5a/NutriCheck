@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt">
-  <head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
-    <title>Recomendações NutriCheck</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
+<head>
+  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recomendações NutriCheck</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
 
-  <body>
-    <h1>As Suas Recomendações NutriCheck</h1>
-    <div id="resultado">
-      <p>A carregar as suas recomendações…</p>
-    </div>
-    
-    <!-- MODAL -->
-    <div id="modal" class="modal hidden">
-      <div class="modal-content">
-        <span id="closeModal" class="close-btn">&times;</span>
-        <div id="modalBody"></div>
-      </div>
-    </div>
+<body>
+  <h1>As Suas Recomendações NutriCheck</h1>
 
-    <script src="app.js"></script>
-  </body>
+  <!-- Container flexível para os cards -->
+  <div id="cardsContainer" class="cards-container">
+    <p>A carregar as suas recomendações…</p>
+  </div>
+  
+  <!-- MODAL -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="closeModal" class="close-btn">&times;</span>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
 </html>
