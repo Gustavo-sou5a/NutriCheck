@@ -32,28 +32,15 @@ p {
   font-weight: 400;
 }
 
-.card {
-  background: #ffffff;
-  padding: 25px 30px;
-  margin-top: 30px;
-  border-radius: 15px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.18);
-}
-
 .cards-container {
+  padding-top: 10px;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
 
 .bloco-card {
-  background: #e9f8f8;
+  background: #ffffff;
   border-radius: 12px;
   padding: 20px;
   flex: 1 1 250px;
@@ -191,5 +178,40 @@ body.modal-open {
   }
   .accordion-header {
     font-size: 1rem;
+  }
+}
+
+/* Botão de download */
+.download-btn {
+  background-color: #2a9d8f;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.download-btn:hover {
+  background-color: #21867a;
+  transform: translateY(-2px);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsivo para telas menores */
+@media (max-width: 600px) {
+  .download-btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.95rem;
+    padding: 10px 15px;
   }
 }
