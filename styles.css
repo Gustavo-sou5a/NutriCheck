@@ -25,6 +25,8 @@ h2 {
 
 p {
   line-height: 1.6;
+  font-size: large;
+  font-weight: 400;
 }
 
 /* FLEX PARA CARDS */
@@ -33,6 +35,7 @@ p {
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
+  padding-top: 15px;
 }
 
 /* CARD ITEM */

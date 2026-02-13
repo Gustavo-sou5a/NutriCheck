@@ -24,8 +24,8 @@ function getMostRelevantRiskFactors() {
   const NUM_RISK_FACTORS = 8;
   const AT_RISK = "1";
 
-  var riskFactors = [];
-  var i = 0;
+  let riskFactors = [];
+  let i = 0;
 
   while (riskFactors.length < MAX_NUM_RECOMMENDATIONS && i < NUM_RISK_FACTORS) {
     if (answers[i] === AT_RISK) {
@@ -50,62 +50,77 @@ const factorsInfo = {
   8: { title: "Horário de Trabalho", icon: "🕒", why: "Horários por turnos exigem uma maior atenção à gestão do sono, da alimentação e da energia ao longo do dia. A evidência mostra que, nestes contextos, estratégias adequadas de organização de rotinas ajudam a preservar o bem-estar metabólico e cardiovascular ao longo do tempo.", todo: ["Durante turnos noturnos ou horários irregulares, privilegie refeições mais leves e simples, evitando grandes quantidades de doces, fritos ou fast food.","Planeie refeições e lanches antes do turno para evitar escolhas impulsivas.","Sempre que possível, mantenha rotinas consistentes de descanso e um ambiente adequado ao sono (escuro e silencioso), ajustado ao seu horário."] }
 };
 
-// CONTAINER DOS CARDS
+// CONTAINER PRINCIPAL
 const cardsContainer = document.getElementById("cardsContainer");
-cardsContainer.innerHTML = ''; // limpar mensagem "A carregar..."
+cardsContainer.innerHTML = '';
 
-if(riskFactors.length === 0){
+// CARD PRINCIPAL DE RECOMENDAÇÕES PRÁTICAS
+const mainCard = document.createElement('div');
+mainCard.classList.add('card');
+mainCard.innerHTML = `<h2>Recomendações Práticas</h2>
+<h3><em>As recomendações apresentadas abaixo foram selecionadas porque representam áreas com maior potencial de melhoria neste momento.</em></h3>`;
+
+// CONTAINER FLEX DENTRO DO CARD
+const flexContainer = document.createElement('div');
+flexContainer.classList.add('cards-container');
+
+// CRIAR OS CARDS COM ICONES
+riskFactors.forEach(index => {
+  const info = factorsInfo[index];
+  if(!info) return;
+
   const card = document.createElement('div');
   card.classList.add('card-item');
-  card.innerHTML = `<div class="card-title">Manutenção de Hábitos</div>
-    <p>De acordo com as suas respostas, <b>os seus hábitos atuais estão bem alinhados com as recomendações para a saúde.</b></p>
-    <p>O foco neste momento é <b>manter este estilo de vida saudável</b> ao longo do tempo, mesmo perante mudanças de rotina ou fases mais exigentes.</p>
-    <p>Este <b>Ponto de Partida</b> serve para <b>reforçar o que já faz bem</b> e apoiar escolhas consistentes no dia a dia. <b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> podem ser úteis para aprofundar conhecimento, esclarecer dúvidas e apoiar a manutenção destes hábitos.</p>
-    <p>Se considera importante continuar a <b>investir na sua saúde</b>, partilhe este interesse com a sua empresa.</p>`;
-  cardsContainer.appendChild(card);
-} else {
-  riskFactors.forEach(index => {
-    const info = factorsInfo[index];
-    if(!info) return;
+  card.dataset.index = index;
 
-    const card = document.createElement('div');
-    card.classList.add('card-item');
-    card.dataset.index = index;
+  card.innerHTML = `<div class="card-icon">${info.icon}</div>
+                    <div class="card-title">${info.title}</div>`;
 
-    card.innerHTML = `<div class="card-icon">${info.icon}</div>
-                      <div class="card-title">${info.title}</div>`;
-
-    card.addEventListener('click', ()=>{
-      let accordionHTML = '';
-      info.todo.forEach((item,i)=>{
-        accordionHTML += `<div class="accordion-item">
-                            <div class="accordion-header">Sugestão ${i+1}</div>
-                            <div class="accordion-content"><p>${item}</p></div>
-                          </div>`;
-      });
-
-      const modal = document.getElementById("modal");
-      const modalBody = document.getElementById("modalBody");
-      modalBody.innerHTML = `<h2>${info.title}</h2>
-                             <h3>Porque é importante:</h3>
-                             <p>${info.why}</p>
-                             <h3>O que pode fazer:</h3>
-                             ${accordionHTML}`;
-
-      modal.classList.add('show');
-      document.body.classList.add('modal-open');
-
-      modalBody.querySelectorAll(".accordion-header").forEach(header=>{
-        header.addEventListener("click",()=>{
-          const item = header.parentElement;
-          item.classList.toggle("active");
-        });
-      });
+  card.addEventListener('click', ()=>{
+    let accordionHTML = '';
+    info.todo.forEach((item,i)=>{
+      accordionHTML += `<div class="accordion-item">
+                          <div class="accordion-header">Sugestão ${i+1}</div>
+                          <div class="accordion-content"><p>${item}</p></div>
+                        </div>`;
     });
 
-    cardsContainer.appendChild(card);
+    const modal = document.getElementById("modal");
+    const modalBody = document.getElementById("modalBody");
+    modalBody.innerHTML = `<h2>${info.title}</h2>
+                           <h3>Porque é importante:</h3>
+                           <p>${info.why}</p>
+                           <h3>O que pode fazer:</h3>
+                           ${accordionHTML}`;
+
+    modal.classList.add('show');
+    document.body.classList.add('modal-open');
+
+    modalBody.querySelectorAll(".accordion-header").forEach(header=>{
+      header.addEventListener("click",()=>{
+        const item = header.parentElement;
+        item.classList.toggle("active");
+      });
+    });
   });
-}
+
+  flexContainer.appendChild(card);
+});
+
+// ADICIONAR FLEX CONTAINER DENTRO DO CARD PRINCIPAL
+mainCard.appendChild(flexContainer);
+cardsContainer.appendChild(mainCard);
+
+// CARD "O PRÓXIMO PASSO"
+const nextStepCard = document.createElement('div');
+nextStepCard.classList.add('card');
+nextStepCard.innerHTML = `<h2>O Próximo Passo</h2>
+<p><b>O desafio que temos para si</b> não é mudar tudo de uma vez — <b>começar por uma ou duas destas prioridades</b> já é um excelente primeiro passo.</p>
+<p>Este <b>Ponto de Partida</b> é apenas o início: o acompanhamento adequado ajuda a transformar recomendações em hábitos sustentáveis ao longo do tempo. 
+<b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> são formas eficazes de aprofundar estas áreas e apoiar mudanças ajustadas ao dia a dia.</p>
+<p>Se considera importante avançar neste caminho, <b>partilhe este interesse com a sua empresa!</b></p>`;
+
+cardsContainer.appendChild(nextStepCard);
 
 // ===== MODAL =====
 const modal = document.getElementById("modal");
