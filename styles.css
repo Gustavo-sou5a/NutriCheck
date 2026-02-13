@@ -171,6 +171,16 @@ p {
   max-height: 1000px;
 }
 
+.accordion-item .accordion-header::after {
+  content: '▼';  /* seta para baixo quando fechado */
+  float: right;
+  transition: transform 0.3s ease;
+}
+
+.accordion-item.active .accordion-header::after {
+  transform: rotate(-180deg); /* seta vira para cima quando aberto */
+}
+
 .accordion-content p {
   margin: 6px 0;
   font-size: 1rem;

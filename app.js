@@ -98,7 +98,7 @@ document.querySelectorAll(".clickable").forEach(card=>{
 
     let accordionHTML = '';
     info.todo.forEach((item,i)=>{
-      accordionHTML += `<div class="accordion-item active">
+      accordionHTML += `<div class="accordion-item">
                           <div class="accordion-header">Sugestão ${i+1}</div>
                           <div class="accordion-content"><p>${item}</p></div>
                         </div>`;
