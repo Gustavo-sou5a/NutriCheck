@@ -123,11 +123,11 @@ const factorsInfo = {
 
 const div = document.getElementById("resultado");
 
-let html = `<div class="card">`;
+let html = ``;
 
 if (riskFactors.length === 0) {
 
-  html += `
+  html += `<div class="card">
     <h2>Manutenção de Hábitos</h2>
     <p>De acordo com as suas respostas, <b>os seus hábitos atuais estão bem alinhados com as recomendações para a saúde.</b></p>
     <p>O foco neste momento é <b>manter este estilo de vida saudável</b> ao longo do tempo, mesmo perante mudanças de rotina ou fases mais exigentes.</p>
@@ -137,15 +137,18 @@ if (riskFactors.length === 0) {
 
 } else {
 
-  html += `<h2><span>Recomendações Práticas<span></h2>
-  <h3><em>As recomendações apresentadas abaixo foram selecionadas porque representam áreas com maior potencial de melhoria neste momento.</em></h3>`;
+  html += `
+  <div class="card">
+    <h2>Recomendações Práticas</h2>
+    <h3><em>As recomendações apresentadas abaixo foram selecionadas porque representam áreas com maior potencial de melhoria neste momento.</em></h3>
+  `;
 
   riskFactors.forEach(index => {
     const info = factorsInfo[index];
     if (!info) return;
 
     html += `
-      <div class="bloco">
+      <div class="bloco clickable" data-index="${index}">
         <h3>${info.title}</h3>
         <p><strong>Porque é importante:</strong> ${info.why}</p>
         <p><strong>O que pode fazer no dia a dia:</strong></p>
@@ -156,17 +159,70 @@ if (riskFactors.length === 0) {
     `;
   });
 
-   html += `
-    <div class="bloco">
-      <h3>O próximo passo:</h3>
+  html += `</div>`;
+
+  // seperate card for "Próximo Passo"
+  html += `
+    <div class="card">
+      <h2>O Próximo Passo</h2>
       <p><b>O desafio que temos para si</b> não é mudar tudo de uma vez — <b>começar por uma ou duas destas prioridades</b> já é um excelente primeiro passo.</p>
       <p>Este <b>Ponto de Partida</b> é apenas o início: o acompanhamento adequado ajuda a transformar recomendações em hábitos sustentáveis ao longo do tempo. 
       <b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> são formas eficazes de aprofundar estas áreas e apoiar mudanças ajustadas ao dia a dia.</p>
       <p>Se considera importante avançar neste caminho, <b>partilhe este interesse com a sua empresa!</b></p>
     </div>
   `;
-
 }
+
 
 html += `</div>`;
 div.innerHTML = html;
+
+const modal = document.getElementById("modal");
+const modalBody = document.getElementById("modalBody");
+const closeModal = document.getElementById("closeModal");
+
+// função para abrir modal
+function openModal(content) {
+  modalBody.innerHTML = content;
+  modal.classList.add("show");
+}
+
+// função para fechar modal
+function hideModal() {
+  modal.classList.remove("show");
+}
+
+// clicar no X
+closeModal.addEventListener("click", hideModal);
+
+// clicar fora do content
+modal.addEventListener("click", e => {
+  if (e.target === modal) hideModal();
+});
+
+// ESC
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") hideModal();
+});
+
+// Adicionar listeners **depois do innerHTML estar no DOM**
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".clickable").forEach(card => {
+    card.addEventListener("click", () => {
+      const idx = card.dataset.index;
+      const info = factorsInfo[idx];
+
+      const content = `
+        <h2>${info.title}</h2>
+        <p><strong>Porque é importante:</strong> ${info.why}</p>
+        <p><strong>O que pode fazer:</strong></p>
+        <ul>
+          ${info.todo.map(item => `<li>${item}</li>`).join("")}
+        </ul>
+      `;
+      openModal(content);
+    });
+  });
+});
+
+

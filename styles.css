@@ -17,7 +17,7 @@ h1 {
 h2 {
   color: #2a9d8f;
   font-size: 1.8rem;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
   border-bottom: 3px solid #2a9d8f;
   padding-bottom: 5px;
 }
@@ -98,4 +98,75 @@ h3 em {
     font-size: 1.1rem;
   }
 }
+
+
+/* MODAL */
+
+
+
+/* Modal Overlay */
+.modal {
+  display: none; /* escondido por defeito */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px); /* blur no fundo */
+  background-color: rgba(0,0,0,0.4); /* semi-transparente */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+/* Quando modal visível */
+.modal.show {
+  display: flex;
+}
+
+/* Conteúdo do modal com animação suave */
+.modal-content {
+  background: white;
+  padding: 25px 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+  /* transição suave */
+  transform: translateY(-50px);
+  opacity: 0;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+/* Modal visível animação */
+.modal.show .modal-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Botão de fechar */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #2a9d8f;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #1f7a63;
+}
+
+/* Scroll lock */
+body.modal-open {
+  overflow: hidden;
+}
+
 
