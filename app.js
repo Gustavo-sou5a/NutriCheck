@@ -177,52 +177,66 @@ if (riskFactors.length === 0) {
 html += `</div>`;
 div.innerHTML = html;
 
+// ===== MODAL =====
 const modal = document.getElementById("modal");
 const modalBody = document.getElementById("modalBody");
 const closeModal = document.getElementById("closeModal");
 
-// função para abrir modal
-function openModal(content) {
-  modalBody.innerHTML = content;
-  modal.classList.add("show");
-}
+// Abrir modal ao clicar na recomendação
+document.querySelectorAll(".clickable").forEach(card => {
+  card.addEventListener("click", () => {
+    const idx = card.dataset.index;
+    const info = factorsInfo[idx];
 
-// função para fechar modal
-function hideModal() {
-  modal.classList.remove("show");
-}
-
-// clicar no X
-closeModal.addEventListener("click", hideModal);
-
-// clicar fora do content
-modal.addEventListener("click", e => {
-  if (e.target === modal) hideModal();
-});
-
-// ESC
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") hideModal();
-});
-
-// Adicionar listeners **depois do innerHTML estar no DOM**
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".clickable").forEach(card => {
-    card.addEventListener("click", () => {
-      const idx = card.dataset.index;
-      const info = factorsInfo[idx];
-
-      const content = `
-        <h2>${info.title}</h2>
-        <p><strong>Porque é importante:</strong> ${info.why}</p>
-        <p><strong>O que pode fazer:</strong></p>
-        <ul>
-          ${info.todo.map(item => `<li>${item}</li>`).join("")}
-        </ul>
+    // Conteúdo accordion
+    let accordionHTML = '';
+    info.todo.forEach((item, i) => {
+      accordionHTML += `
+        <div class="accordion-item">
+          <div class="accordion-header">Sugestão ${i+1}</div>
+          <div class="accordion-content"><p>${item}</p></div>
+        </div>
       `;
-      openModal(content);
+    });
+
+    modalBody.innerHTML = `
+      <h2>${info.title}</h2>
+      <h3>Porque é importante:</h3>
+      <p>${info.why}</p>
+      <h3>O que pode fazer:</h3>
+      ${accordionHTML}
+    `;
+
+    // Mostrar modal
+    modal.classList.add("show");
+    document.body.classList.add("modal-open");
+
+    // Accordion functionality
+    modalBody.querySelectorAll(".accordion-header").forEach(header => {
+      header.addEventListener("click", () => {
+        const item = header.parentElement;
+        item.classList.toggle("active");
+      });
     });
   });
+});
+
+// Fechar modal
+function closeModalFunc() {
+  modal.classList.remove("show");
+  document.body.classList.remove("modal-open");
+}
+
+closeModal.addEventListener("click", closeModalFunc);
+
+// Clique fora do modal
+window.addEventListener("click", e => {
+  if (e.target === modal) closeModalFunc();
+});
+
+// ESC para fechar
+window.addEventListener("keydown", e => {
+  if (e.key === "Escape" && modal.classList.contains("show")) closeModalFunc();
 });
 
 
