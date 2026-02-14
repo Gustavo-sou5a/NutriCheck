@@ -62,7 +62,8 @@ if(riskFactors.length === 0){
 if(riskFactors.length>0){
   html += `<div class="card">
     <h2>Recomendações Práticas</h2>
-    <h3><em>As recomendações apresentadas abaixo foram selecionadas porque representam áreas com maior potencial de melhoria neste momento.</em></h3>
+    <h3>As recomendações apresentadas abaixo foram selecionadas porque representam áreas com maior potencial de melhoria neste momento.</h3>
+    <p><em>(clique nos ícones abaixo para saber mais sobre cada uma)</em></p>
     <div class="cards-container">`;
 
   riskFactors.forEach(index=>{
