@@ -107,6 +107,10 @@ p {
   padding: 10px; /* espaço para telas pequenas */
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 .modal.show {
   opacity: 1;
   pointer-events: auto;
