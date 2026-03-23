@@ -140,11 +140,11 @@ if (riskFactors.length > 0) {
 
   btn.addEventListener("click", () => {
     let loaded = 0;
-    let wmImg = null, logoImg = null;
+    let wmImg = null, logoImg = null, capaImg = null;
 
     function onLoaded() {
       loaded++;
-      if (loaded === 2) generatePDF(wmImg, logoImg);
+      if (loaded === 3) generatePDF(wmImg, logoImg, capaImg);
     }
 
     const _wm = new Image();
@@ -156,9 +156,14 @@ if (riskFactors.length > 0) {
     _logo.onload  = () => { logoImg = _logo; onLoaded(); };
     _logo.onerror = () => { onLoaded(); };
     _logo.src = "logo.png";
+
+    const _capa = new Image();
+    _capa.onload  = () => { capaImg = _capa; onLoaded(); };
+    _capa.onerror = () => { onLoaded(); };
+    _capa.src = "capa_cortada.png";
   });
 
-  function generatePDF(wmImg, logoImg) {
+  function generatePDF(wmImg, logoImg, capaImg) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ unit: "mm", format: "a4" });
 
@@ -167,23 +172,20 @@ if (riskFactors.length > 0) {
     const MARGIN      = 18;
     const CONTENT_W   = PAGE_W - MARGIN * 2;
     const FOOTER_H    = 10;
-    const SAFE_BOTTOM = PAGE_H - FOOTER_H - 4; // never draw below this
+    const SAFE_BOTTOM = PAGE_H - FOOTER_H - 4;
     let y = 0;
 
-    // Font sizes
     const FS_SUGGESTION = 11;
     const FS_WHY        = 8.5;
     const FS_WHY_LABEL  = 10;
-
-    // Line height per font size: pt * 0.3528 (pt→mm) * 1.4 (leading)
     const LH = fs => fs * 0.3528 * 1.4;
+    const V_PAD        = 5;
+    const BASELINE_OFF = 3.5;
 
-    const V_PAD        = 5;   // vertical padding inside boxes (top & bottom)
-    const BASELINE_OFF = 3.5; // distance from box top edge to first text baseline
-
-    // Palette
     const GREEN       = [34, 139, 87];
+    const GREEN_DARK  = [26, 107, 42];
     const GREEN_LIGHT = [236, 247, 241];
+    const YELLOW      = [245, 200, 0];
     const GREY_DARK   = [40, 40, 40];
     const GREY_MID    = [100, 100, 100];
     const GREY_LIGHT  = [245, 245, 245];
@@ -194,7 +196,6 @@ if (riskFactors.length > 0) {
       doc.addImage(wmImg, "PNG", 0, 0, PAGE_W, PAGE_H);
     }
 
-    // Break page only if block won't fit — guarantees no box is ever split
     function ensureFits(blockH) {
       if (y + blockH > SAFE_BOTTOM) {
         doc.addPage();
@@ -203,7 +204,6 @@ if (riskFactors.length > 0) {
       }
     }
 
-    // Calculate wrapped lines using the exact font size that will be used
     function calcLines(text, fontSize, maxWidth) {
       doc.setFontSize(fontSize);
       return doc.splitTextToSize(text, maxWidth);
@@ -214,44 +214,38 @@ if (riskFactors.length > 0) {
       doc.roundedRect(x, ry, w, h, r, r, "F");
     }
 
-    // ---- PAGE 1 ----
+    // ---- PAGE 1: watermark + capa as header ----
     drawWatermark();
 
-    // ---- HEADER ----
-    doc.setFillColor(...GREEN);
-    doc.rect(0, 0, PAGE_W, 42, "F");
-
-    doc.setTextColor(...WHITE);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.text("Recomendações NutriCheck+", MARGIN, 18);
-
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text("As suas recomendações personalizadas de saúde", MARGIN, 27);
-
-    const today = new Date().toLocaleDateString("pt-PT", { day: "2-digit", month: "long", year: "numeric" });
-    doc.setFontSize(8);
-    doc.setTextColor(200, 230, 210);
-    doc.text(today, MARGIN, 36, { align: "left" });
-
-    if (logoImg) {
-      const LOGO_H = 18;
-      const LOGO_W = LOGO_H * (logoImg.naturalWidth / logoImg.naturalHeight);
-      const logoX  = PAGE_W - MARGIN - LOGO_W;
-      const logoY  = (42 - LOGO_H) / 2;
-
-      // Círculo branco por baixo do logo
-      const circleR  = Math.max(LOGO_W, LOGO_H) / 2; // raio = metade do maior lado + margem
-      const circleCX = logoX + LOGO_W / 2;
-      const circleCY = logoY + LOGO_H / 2;
-      doc.setFillColor(255, 255, 255);
-      doc.circle(circleCX, circleCY, circleR, "F");
-
-      doc.addImage(logoImg, "PNG", logoX, logoY, LOGO_W, LOGO_H);
+    const CAPA_H = 55; // mm — crop central da capa (1536×402px → sem distorção)
+    if (capaImg) {
+      doc.addImage(capaImg, "PNG", 0, 0, PAGE_W, CAPA_H);
+    } else {
+      doc.setFillColor(...GREEN_DARK);
+      doc.rect(0, 0, PAGE_W, CAPA_H, "F");
+      doc.setTextColor(...WHITE);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(26);
+      doc.text("NutriCheck+", PAGE_W / 2, CAPA_H / 2, { align: "center" });
     }
 
-    y = 52;
+    // Yellow accent line below capa
+    doc.setFillColor(...YELLOW);
+    doc.rect(0, CAPA_H, PAGE_W, 1.5, "F");
+
+    // Subtitle + date below capa
+    y = CAPA_H + 15;
+    doc.setTextColor(...GREEN_DARK);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("As suas recomendações personalizadas", MARGIN, y);
+    y += 6;
+    const today = new Date().toLocaleDateString("pt-PT", { day: "2-digit", month: "long", year: "numeric" });
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(...GREY_MID);
+    doc.text(today, MARGIN, y);
+    y += 10;
 
     // ---- INTRO ----
     const introLines = calcLines(
@@ -268,88 +262,114 @@ if (riskFactors.length > 0) {
     riskFactors.forEach((index) => {
       const info = factorsInfo[index];
 
-      // Pre-calculate everything before drawing a single pixel
       const TITLE_BAR_H = 16;
       const LABEL_H     = 10;
 
       const suggBlocks = info.todo.map(item => {
         const lines = calcLines(item, FS_SUGGESTION, CONTENT_W - 14);
-        // boxH = padding top + all text lines + padding bottom
         const boxH = V_PAD + lines.length * LH(FS_SUGGESTION) + V_PAD;
         return { lines, boxH };
       });
 
       const whyLines = calcLines(info.why, FS_WHY, CONTENT_W - 8);
-      // why box: label line + gap + text lines + padding
       const whyBoxH = V_PAD + LH(FS_WHY_LABEL) + 1 + whyLines.length * LH(FS_WHY) + V_PAD;
 
-      // Ensure at minimum the title + label + first suggestion fit together
       const minH = TITLE_BAR_H + LABEL_H + suggBlocks[0].boxH + 3;
       ensureFits(minH);
 
-      // ---- Title bar ----
+      // Title bar
       filledRoundedRect(MARGIN - 4, y - 2, CONTENT_W + 8, 12, 3, GREEN);
       doc.setTextColor(...WHITE);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(12);
       doc.text(info.title, MARGIN + 1, y + 6);
-      y += TITLE_BAR_H;
+      y += TITLE_BAR_H + 3;
 
-      // ---- "O que pode fazer" label ----
+      // Label
       doc.setTextColor(...GREY_DARK);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(9);
+      doc.setFontSize(11);
       doc.text("O que pode fazer no dia a dia:", MARGIN, y);
-      y += LABEL_H;
+      y += LABEL_H - 2;
 
-      // ---- Suggestion boxes — each must fit entirely on the page ----
+      // Suggestion boxes
       suggBlocks.forEach(({ lines, boxH }) => {
-        ensureFits(boxH + 3); // +3 for gap between boxes
-
+        ensureFits(boxH + 3);
         const rectY = y;
         filledRoundedRect(MARGIN, rectY, CONTENT_W, boxH, 2, GREY_LIGHT);
-
-        // Bullet: vertically centered in box
         doc.setFillColor(...GREEN);
         doc.circle(MARGIN + 5, rectY + boxH / 2, 2, "F");
-
-        // Text: starts at top padding + baseline offset
         doc.setTextColor(...GREY_DARK);
         doc.setFont("helvetica", "normal");
         doc.setFontSize(FS_SUGGESTION);
         doc.text(lines, MARGIN + 11, rectY + V_PAD + BASELINE_OFF);
-
         y += boxH + 3;
       });
 
       y += 3;
 
-      // ---- "Porque é importante" box — must fit entirely ----
+      // "Porque é importante" box
       ensureFits(whyBoxH + 4);
-
       filledRoundedRect(MARGIN, y, CONTENT_W, whyBoxH, 2, GREEN_LIGHT);
-
-      // Label
       doc.setTextColor(...GREEN);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(FS_WHY_LABEL);
       doc.text("Porque é importante:", MARGIN + 4, y + V_PAD + BASELINE_OFF);
-
-      // Why text starts after label line
       doc.setTextColor(...GREY_MID);
       doc.setFont("helvetica", "italic");
       doc.setFontSize(FS_WHY);
       doc.text(whyLines, MARGIN + 4, y + V_PAD + BASELINE_OFF + LH(FS_WHY_LABEL) + 1);
-
       y += whyBoxH + 10;
     });
+
+    // ---- O PRÓXIMO PASSO ----
+    const ns1 = calcLines("O desafio que temos para si não é mudar tudo de uma vez — começar por uma ou duas destas prioridades já é um excelente primeiro passo.", 9, CONTENT_W - 12);
+    const ns2 = calcLines("Este Ponto de Partida é apenas o início: o acompanhamento adequado ajuda a transformar recomendações em hábitos sustentáveis ao longo do tempo. Consultas de nutrição, ações educativas e workshops práticos são formas eficazes de aprofundar estas áreas e apoiar mudanças ajustadas ao dia a dia.", 9, CONTENT_W - 12);
+    const ns3 = calcLines("Se considera importante avançar neste caminho, partilhe este interesse com a sua empresa!", 9, CONTENT_W - 12);
+
+    const nsBoxH = V_PAD + LH(12) + 4
+      + ns1.length * LH(9) + 4
+      + ns2.length * LH(9) + 4
+      + ns3.length * LH(9)
+      + V_PAD;
+
+    ensureFits(nsBoxH + 4);
+
+    // Green-light box with dark green left bar
+    filledRoundedRect(MARGIN, y, CONTENT_W, nsBoxH, 3, GREEN_LIGHT);
+    doc.setFillColor(...GREEN_DARK);
+    doc.rect(MARGIN, y, 3, nsBoxH, "F");
+
+    let ny = y + V_PAD;
+
+    doc.setTextColor(...GREEN_DARK);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.text("O Próximo Passo", MARGIN + 8, ny + BASELINE_OFF);
+    ny += LH(12) + 4;
+
+    doc.setTextColor(...GREY_DARK);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.text(ns1, MARGIN + 8, ny + BASELINE_OFF);
+    ny += ns1.length * LH(9) + 4;
+
+    doc.text(ns2, MARGIN + 8, ny + BASELINE_OFF);
+    ny += ns2.length * LH(9) + 4;
+
+    doc.setFont("helvetica", "bold");
+    doc.text(ns3, MARGIN + 8, ny + BASELINE_OFF);
+
+    y += nsBoxH + 10;
 
     // ---- FOOTER on every page ----
     const pageCount = doc.getNumberOfPages();
     for (let p = 1; p <= pageCount; p++) {
       doc.setPage(p);
-      doc.setFillColor(...GREEN);
+      doc.setFillColor(...GREEN_DARK);
       doc.rect(0, PAGE_H - FOOTER_H, PAGE_W, FOOTER_H, "F");
+      doc.setFillColor(...YELLOW);
+      doc.rect(0, PAGE_H - FOOTER_H, PAGE_W, 1, "F");
       doc.setTextColor(...WHITE);
       doc.setFontSize(7);
       doc.setFont("helvetica", "normal");
