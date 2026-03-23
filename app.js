@@ -326,11 +326,13 @@ if (riskFactors.length > 0) {
     const ns1 = calcLines("O desafio que temos para si não é mudar tudo de uma vez — começar por uma ou duas destas prioridades já é um excelente primeiro passo.", 9, CONTENT_W - 12);
     const ns2 = calcLines("Este Ponto de Partida é apenas o início: o acompanhamento adequado ajuda a transformar recomendações em hábitos sustentáveis ao longo do tempo. Consultas de nutrição, ações educativas e workshops práticos são formas eficazes de aprofundar estas áreas e apoiar mudanças ajustadas ao dia a dia.", 9, CONTENT_W - 12);
     const ns3 = calcLines("Se considera importante avançar neste caminho, partilhe este interesse com a sua empresa!", 9, CONTENT_W - 12);
+    const ns4 = calcLines("Partilha este questionário com alguém importante para si e que queira cuidar, através do link: https://tally.so/r/GxpN52", 9, CONTENT_W - 12);
 
     const nsBoxH = V_PAD + LH(12) + 4
       + ns1.length * LH(9) + 4
       + ns2.length * LH(9) + 4
-      + ns3.length * LH(9)
+      + ns3.length * LH(9) + 4
+      + ns4.length * LH(9)
       + V_PAD;
 
     ensureFits(nsBoxH + 4);
@@ -359,6 +361,10 @@ if (riskFactors.length > 0) {
 
     doc.setFont("helvetica", "bold");
     doc.text(ns3, MARGIN + 8, ny + BASELINE_OFF);
+    ny += ns3.length * LH(9) + 4;
+
+    doc.setFont("helvetica", "bold");
+    doc.text(ns4, MARGIN + 8, ny + BASELINE_OFF);
 
     y += nsBoxH + 10;
 
