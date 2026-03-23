@@ -49,6 +49,7 @@ if(riskFactors.length === 0){
     <p>O foco neste momento é <b>manter este estilo de vida saudável</b> ao longo do tempo, mesmo perante mudanças de rotina ou fases mais exigentes.</p>
     <p>Este <b>Ponto de Partida</b> serve para <b>reforçar o que já faz bem</b> e apoiar escolhas consistentes no dia a dia. <b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> podem ser úteis para aprofundar conhecimento, esclarecer dúvidas e apoiar a manutenção destes hábitos.</p>
     <p>Se considera importante continuar a <b>investir na sua saúde</b>, partilhe este interesse com a sua empresa!</p>
+    <p><b>Partilhe este questionário com alguém importante para si e que queira cuidar, através do link: https://tally.so/r/GxpN52</b></p>
   </div>`;
 }
 
@@ -75,6 +76,7 @@ if(riskFactors.length>0){
     <p>Este <b>Ponto de Partida</b> é apenas o início: o acompanhamento adequado ajuda a transformar recomendações em hábitos sustentáveis ao longo do tempo. 
     <b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> são formas eficazes de aprofundar estas áreas e apoiar mudanças ajustadas ao dia a dia.</p>
     <p>Se considera importante avançar neste caminho, <b>partilhe este interesse com a sua empresa!</b></p>
+    <p><b>Partilhe este questionário com alguém importante para si e que queira cuidar, através do link: https://tally.so/r/GxpN52</b></p>
   </div>`;
 }
 
@@ -326,7 +328,7 @@ if (riskFactors.length > 0) {
     const ns1 = calcLines("O desafio que temos para si não é mudar tudo de uma vez — começar por uma ou duas destas prioridades já é um excelente primeiro passo.", 9, CONTENT_W - 12);
     const ns2 = calcLines("Este Ponto de Partida é apenas o início: o acompanhamento adequado ajuda a transformar recomendações em hábitos sustentáveis ao longo do tempo. Consultas de nutrição, ações educativas e workshops práticos são formas eficazes de aprofundar estas áreas e apoiar mudanças ajustadas ao dia a dia.", 9, CONTENT_W - 12);
     const ns3 = calcLines("Se considera importante avançar neste caminho, partilhe este interesse com a sua empresa!", 9, CONTENT_W - 12);
-    const ns4 = calcLines("Partilha este questionário com alguém importante para si e que queira cuidar, através do link: https://tally.so/r/GxpN52", 9, CONTENT_W - 12);
+    const ns4 = calcLines("Partilhe este questionário com alguém importante para si e que queira cuidar, através do link: https://tally.so/r/GxpN52", 9, CONTENT_W - 12);
 
     const nsBoxH = V_PAD + LH(12) + 4
       + ns1.length * LH(9) + 4
