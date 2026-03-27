@@ -26,7 +26,6 @@ h2 {
 
 h3 {
   margin-bottom: 20px;
-  text-align: justify;
 }
 
 p {
@@ -55,6 +54,7 @@ p {
   justify-content: center;
   text-align: center;
   position: relative;
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.18);
 }
 
 .bloco-card::after {
@@ -74,7 +74,7 @@ p {
 .bloco-card:hover {
   background: #d4f0ed;
   transform: translateY(-3px);
-  box-shadow: 0 5px 5px rgba(0,0,0,0.18);
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.18);
 }
 
 .bloco-card .icon {
@@ -237,12 +237,13 @@ body.modal-open {
   gap: 8px;
   margin-top: 30px;
   margin-left: auto; /* alinha à direita */
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.18);
 }
 
 .download-btn:hover {
   background-color: #21867a;
   transform: translateY(-2px);
-  box-shadow: 0 5px 5px rgba(0,0,0,0.18);
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.18);
 }
 
 .download-btn:active {
