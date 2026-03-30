@@ -50,8 +50,7 @@ const T = {
     noRiskP2: "O foco neste momento é <b>manter este estilo de vida saudável</b> ao longo do tempo, mesmo perante mudanças de rotina ou fases mais exigentes.",
     noRiskP3: "Este <b>Ponto de Partida</b> serve para <b>reforçar o que já faz bem</b> e apoiar escolhas consistentes no dia a dia. <b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> podem ser úteis para aprofundar conhecimento, esclarecer dúvidas e apoiar a manutenção destes hábitos.",
     noRiskP4: "Se considera importante continuar a <b>investir na sua saúde</b>, partilhe este interesse com a sua empresa!",
-    noRiskP5: `<b>Partilhe este questionário com alguém importante para si e que queira cuidar, através do link: ${PORTUGUESE_LINK}</b>`,
-
+    noRiskP5: `<b>Partilhe este questionário com alguém importante para si e que queira cuidar, através do link: <a href="${PORTUGUESE_LINK}" target="_blank">${PORTUGUESE_LINK}</a></b>`,    
     // Recommendations card
     recTitle: "Recomendações Práticas",
     recSubtitle: "As recomendações apresentadas abaixo foram selecionadas porque representam áreas com maior potencial de melhoria neste momento.",
@@ -62,7 +61,7 @@ const T = {
     nextP1: "<b>O desafio que temos para si</b> não é mudar tudo de uma vez — <b>começar por uma ou duas destas prioridades</b> já é um excelente primeiro passo.",
     nextP2: "Este <b>Ponto de Partida</b> é apenas o início: o acompanhamento adequado ajuda a transformar recomendações em hábitos sustentáveis ao longo do tempo. <b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> são formas eficazes de aprofundar estas áreas e apoiar mudanças ajustadas ao dia a dia.",
     nextP3: "Se considera importante avançar neste caminho, <b>partilhe este interesse com a sua empresa!</b>",
-    nextP4: `<b>Partilhe este questionário com alguém importante para si e que queira cuidar, através do link: ${PORTUGUESE_LINK}</b>`,
+    nextP4: `<b>Partilhe este questionário com alguém importante para si e que queira cuidar, através do link: <a href="${PORTUGUESE_LINK}" target="_blank">${PORTUGUESE_LINK}</a></b>`,    
 
     // Modal
     modalDayLabel: "O que pode fazer no dia a dia:",
@@ -96,8 +95,8 @@ const T = {
     noRiskP2: "The focus right now is to <b>maintain this healthy lifestyle</b> over time, even when routines change or things get more demanding.",
     noRiskP3: "This <b>Starting Point</b> is here to <b>reinforce what you are already doing well</b> and support consistent daily choices. <b>Nutrition consultations</b>, <b>educational sessions</b>, and <b>practical workshops</b> can be useful to deepen knowledge, clarify doubts, and help sustain these habits.",
     noRiskP4: "If you feel it is important to keep <b>investing in your health</b>, share this interest with your company!",
-    noRiskP5: `<b>Share this questionnaire with someone you care about, using the link: ${ENGLISH_LINK}</b>`,
-
+    noRiskP5: `<b>Share this questionnaire with someone you care about, using the link: <a href="${ENGLISH_LINK}" target="_blank">${ENGLISH_LINK}</a></b>`,
+    
     // Recommendations card
     recTitle: "Practical Recommendations",
     recSubtitle: "The recommendations below were selected because they represent the areas with the greatest potential for improvement right now.",
@@ -108,8 +107,8 @@ const T = {
     nextP1: "<b>The challenge we have for you</b> is not to change everything at once — <b>starting with one or two of these priorities</b> is already an excellent first step.",
     nextP2: "This <b>Starting Point</b> is just the beginning: proper support helps turn recommendations into sustainable habits over time. <b>Nutrition consultations</b>, <b>educational sessions</b>, and <b>practical workshops</b> are effective ways to go deeper in these areas and support changes that fit your daily life.",
     nextP3: "If you feel it is important to move forward on this path, <b>share this interest with your company!</b>",
-    nextP4: `<b>Share this questionnaire with someone you care about, using the link: ${ENGLISH_LINK}</b>`,
-
+    nextP4: `<b>Share this questionnaire with someone you care about, using the link: <a href="${ENGLISH_LINK}" target="_blank">${ENGLISH_LINK}</a></b>`,
+    
     // Modal
     modalDayLabel: "What you can do every day:",
     modalSuggestionLabel: "Suggestion",
@@ -636,8 +635,52 @@ if (riskFactors.length > 0) {
     doc.text(ns3, MARGIN + 8, ny + BASELINE_OFF);
     ny += ns3.length * LH(9) + 4;
 
+    // Escreve todas as linhas menos a última
     doc.setFont("helvetica", "bold");
-    doc.text(ns4, MARGIN + 8, ny + BASELINE_OFF);
+    doc.setTextColor(...GREY_DARK);
+    ns4.slice(0, -1).forEach((line, i) => {
+      doc.text(line, MARGIN + 8, ny + i * LH(9) + BASELINE_OFF);
+    });
+
+    // Linha por linha, detectando link corretamente
+    doc.setFont("helvetica", "bold");
+    let nyLine = ny;
+    ns4.forEach((line) => {
+      let x = MARGIN + 8;
+
+      if (line.includes(ENGLISH_LINK) || line.includes(PORTUGUESE_LINK)) {
+        const link = isEN ? ENGLISH_LINK : PORTUGUESE_LINK;
+        const parts = line.split(link);
+
+        // Parte antes do link
+        if (parts[0]) {
+          doc.setTextColor(...GREY_DARK);
+          doc.text(parts[0], x, nyLine + BASELINE_OFF);
+          x += doc.getTextWidth(parts[0]);
+        }
+
+        // Link
+        doc.setTextColor(0, 0, 255);
+        doc.text(link, x, nyLine + BASELINE_OFF);
+        const linkW = doc.getTextWidth(link);
+        doc.setDrawColor(0, 0, 255);
+        doc.setLineWidth(0.5);
+        doc.line(x, nyLine + BASELINE_OFF + 1, x + linkW, nyLine + BASELINE_OFF + 1);
+        x += linkW;
+
+        // Parte depois do link
+        if (parts[1]) {
+          doc.setTextColor(...GREY_DARK);
+          doc.text(parts[1], x, nyLine + BASELINE_OFF);
+        }
+      } else {
+        // Linha normal
+        doc.setTextColor(...GREY_DARK);
+        doc.text(line, x, nyLine + BASELINE_OFF);
+      }
+
+      nyLine += LH(9);
+    });
 
     y += nsBoxH + 10;
 
