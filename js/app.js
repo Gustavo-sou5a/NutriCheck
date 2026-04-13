@@ -1,17 +1,17 @@
-const ENGLISH_LINK = "https://tally.so/r/7Ro4B9";
-const PORTUGUESE_LINK = "https://tally.so/r/dWPqGq";
-const ENGLISH = "eng";
-const PORTUGUESE = "pt";
-const IMAGES_FOLDER = "../assets/"
+import { COMMON_TEXT, PORTUGUESE_LINK, ENGLISH_LINK } from "./translations/common.js";
+import generatePDF from "./report.js";
 
-// Função para ler parâmetros da URL
+const PORTUGUESE = "pt";
+const IMAGES_FOLDER = "../assets/";
+
+// ── URL PARAMS ────────────────────────────────────────────────────────────────
+
 function getParam(name) {
   const url = new URL(window.location.href);
   return url.searchParams.get(name);
 }
 
-const lang = getParam("lang") || PORTUGUESE;
-const isEN = lang === ENGLISH;
+export const lang = getParam("lang") || PORTUGUESE;
 
 const answers = [
   getParam("var1_sono"),
@@ -39,50 +39,40 @@ const riskFactors = getMostRelevantRiskFactors();
 
 // ── TRANSLATIONS ──────────────────────────────────────────────────────────────
 
-const T = {
+const TEXT = {
   pt: {
     pageTitle: "Recomendações NutriCheck+",
     heading: "As Suas Recomendações NutriCheck+",
     loading: "A carregar as suas recomendações…",
 
-    // No-risk card
+    // 1. No-risk info
     noRiskTitle: "Manutenção de Hábitos",
-    noRiskP1: "De acordo com as suas respostas, <b>os seus hábitos atuais estão bem alinhados com as recomendações para a saúde.</b>",
-    noRiskP2: "O foco neste momento é <b>manter este estilo de vida saudável</b> ao longo do tempo, mesmo perante mudanças de rotina ou fases mais exigentes.",
-    noRiskP3: "Este <b>Ponto de Partida</b> serve para <b>reforçar o que já faz bem</b> e apoiar escolhas consistentes no dia a dia. <b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> podem ser úteis para aprofundar conhecimento, esclarecer dúvidas e apoiar a manutenção destes hábitos.",
-    noRiskP4: "Se considera importante continuar a <b>investir na sua saúde</b>, partilhe este interesse com a sua empresa!",
-    noRiskP5: `<b>Partilhe este questionário com alguém importante para si e que queira cuidar, através do link: <a href="${PORTUGUESE_LINK}" target="_blank">${PORTUGUESE_LINK}</a></b>`,    
-    // Recommendations card
+    noRiskP1: "De acordo com as suas respostas, os seus hábitos atuais estão bem alinhados com as recomendações para a saúde.",
+    noRiskP2: "O foco neste momento é manter este estilo de vida saudável ao longo do tempo, mesmo perante mudanças de rotina ou fases mais exigentes.",
+    noRiskP3: "Este Ponto de Partida serve para reforçar o que já faz bem e apoiar escolhas consistentes no dia a dia. Consultas de nutrição, ações educativas e workshops práticos podem ser úteis para aprofundar conhecimento, esclarecer dúvidas e apoiar a manutenção destes hábitos.",
+    noRiskP4: "Se considera importante continuar a investir na sua saúde, partilhe este interesse com a sua empresa!",
+    noRiskP5: COMMON_TEXT.pt.webPageLink,
+
+    // 2. Risk info
+    // 2.1 Recommendations card
     recTitle: "Recomendações Práticas",
     recSubtitle: "As recomendações apresentadas abaixo foram selecionadas porque representam áreas com maior potencial de melhoria neste momento.",
     recHint: "(clique nos ícones abaixo para saber mais sobre cada uma)",
 
-    // Next step card
-    nextTitle: "O Próximo Passo",
-    nextP1: "<b>O desafio que temos para si</b> não é mudar tudo de uma vez — <b>começar por uma ou duas destas prioridades</b> já é um excelente primeiro passo.",
-    nextP2: "Este <b>Ponto de Partida</b> é apenas o início: o acompanhamento adequado ajuda a transformar recomendações em hábitos sustentáveis ao longo do tempo. <b>Consultas de nutrição</b>, <b>ações educativas</b> e <b>workshops práticos</b> são formas eficazes de aprofundar estas áreas e apoiar mudanças ajustadas ao dia a dia.",
-    nextP3: "Se considera importante avançar neste caminho, <b>partilhe este interesse com a sua empresa!</b>",
-    nextP4: `<b>Partilhe este questionário com alguém importante para si e que queira cuidar, através do link: <a href="${PORTUGUESE_LINK}" target="_blank">${PORTUGUESE_LINK}</a></b>`,    
+    // 2.2 Next step card
+    nextTitle: COMMON_TEXT.pt.nextTitle,
+    nextP1: COMMON_TEXT.pt.nextP1,
+    nextP2: COMMON_TEXT.pt.nextP2,
+    nextP3: COMMON_TEXT.pt.nextP3,
+    nextLink: COMMON_TEXT.pt.webPageLink,
 
-    // Modal
-    modalDayLabel: "O que pode fazer no dia a dia:",
+    // 2.3 Modal
+    modalDailyLabel: "O que pode fazer no dia a dia:",
     modalSuggestionLabel: "Sugestão",
     modalWhyLabel: "Porque é importante",
 
-    // PDF
+    // 2.4 PDF button
     downloadBtn: "Baixar Recomendações (PDF)",
-    pdfSubtitle: "As suas recomendações personalizadas",
-    pdfIntro: "As recomendações abaixo foram selecionadas com base nas suas respostas e representam as áreas com maior potencial de melhoria. Não precisa de mudar tudo de uma vez — comece por uma ou duas prioridades.",
-    pdfDayLabel: "O que pode fazer no dia a dia:",
-    pdfWhyLabel: "Porque é importante:",
-    pdfNextTitle: "O Próximo Passo",
-    pdfNext1: "O desafio que temos para si não é mudar tudo de uma vez — começar por uma ou duas destas prioridades já é um excelente primeiro passo.",
-    pdfNext2: "Este Ponto de Partida é apenas o início: o acompanhamento adequado ajuda a transformar recomendações em hábitos sustentáveis ao longo do tempo. Consultas de nutrição, ações educativas e workshops práticos são formas eficazes de aprofundar estas áreas e apoiar mudanças ajustadas ao dia a dia.",
-    pdfNext3: "Se considera importante avançar neste caminho, partilhe este interesse com a sua empresa!",
-    pdfNext4: `Partilhe este questionário com alguém importante para si e que queira cuidar, através do link: ${PORTUGUESE_LINK}`,
-    pdfFooter: "NutriCheck+  •  Recomendações Personalizadas",
-    pdfFilename: "recomendacoes_nutricheck.pdf",
-    pdfDateLocale: "pt-PT",
   },
 
   eng: {
@@ -92,52 +82,40 @@ const T = {
 
     // No-risk card
     noRiskTitle: "Habit Maintenance",
-    noRiskP1: "Based on your answers, <b>your current habits are well aligned with health recommendations.</b>",
-    noRiskP2: "The focus right now is to <b>maintain this healthy lifestyle</b> over time, even when routines change or things get more demanding.",
-    noRiskP3: "This <b>Starting Point</b> is here to <b>reinforce what you are already doing well</b> and support consistent daily choices. <b>Nutrition consultations</b>, <b>educational sessions</b>, and <b>practical workshops</b> can be useful to deepen knowledge, clarify doubts, and help sustain these habits.",
-    noRiskP4: "If you feel it is important to keep <b>investing in your health</b>, share this interest with your company!",
-    noRiskP5: `<b>Share this questionnaire with someone you care about, using the link: <a href="${ENGLISH_LINK}" target="_blank">${ENGLISH_LINK}</a></b>`,
-    
+    noRiskP1: "Based on your answers, your current habits are well aligned with health recommendations.",
+    noRiskP2: "The focus right now is to maintain this healthy lifestyle over time, even when routines change or things get more demanding.",
+    noRiskP3: "This Starting Point is here to reinforce what you are already doing well and support consistent daily choices. Nutrition consultations, educational sessions, and practical workshops can be useful to deepen knowledge, clarify doubts, and help sustain these habits.",
+    noRiskP4: "If you feel it is important to keep investing in your health, share this interest with your company!",
+    noRiskP5: COMMON_TEXT.eng.webPageLink,
+
     // Recommendations card
     recTitle: "Practical Recommendations",
     recSubtitle: "The recommendations below were selected because they represent the areas with the greatest potential for improvement right now.",
     recHint: "(click the icons below to learn more about each one)",
 
     // Next step card
-    nextTitle: "The Next Step",
-    nextP1: "<b>The challenge we have for you</b> is not to change everything at once — <b>starting with one or two of these priorities</b> is already an excellent first step.",
-    nextP2: "This <b>Starting Point</b> is just the beginning: proper support helps turn recommendations into sustainable habits over time. <b>Nutrition consultations</b>, <b>educational sessions</b>, and <b>practical workshops</b> are effective ways to go deeper in these areas and support changes that fit your daily life.",
-    nextP3: "If you feel it is important to move forward on this path, <b>share this interest with your company!</b>",
-    nextP4: `<b>Share this questionnaire with someone you care about, using the link: <a href="${ENGLISH_LINK}" target="_blank">${ENGLISH_LINK}</a></b>`,
-    
+    nextTitle: COMMON_TEXT.eng.nextTitle,
+    nextP1: COMMON_TEXT.eng.nextP1,
+    nextP2: COMMON_TEXT.eng.nextP2,
+    nextP3: COMMON_TEXT.eng.nextP3,
+    nextLink: COMMON_TEXT.eng.webPageLink,
+
     // Modal
-    modalDayLabel: "What you can do every day:",
+    modalDailyLabel: "What you can do every day:",
     modalSuggestionLabel: "Suggestion",
     modalWhyLabel: "Why it matters",
 
-    // PDF
+    // 2.4 PDF button
     downloadBtn: "Download Recommendations (PDF)",
-    pdfSubtitle: "Your personalised recommendations",
-    pdfIntro: "The recommendations below were selected based on your answers and represent the areas with the greatest potential for improvement. You don't need to change everything at once — start with one or two priorities.",
-    pdfDayLabel: "What you can do every day:",
-    pdfWhyLabel: "Why it matters:",
-    pdfNextTitle: "The Next Step",
-    pdfNext1: "The challenge we have for you is not to change everything at once — starting with one or two of these priorities is already an excellent first step.",
-    pdfNext2: "This Starting Point is just the beginning: proper support helps turn recommendations into sustainable habits over time. Nutrition consultations, educational sessions, and practical workshops are effective ways to go deeper in these areas and support changes that fit your daily life.",
-    pdfNext3: "If you feel it is important to move forward on this path, share this interest with your company!",
-    pdfNext4: `Share this questionnaire with someone you care about, using the link: ${ENGLISH_LINK}`,
-    pdfFooter: "NutriCheck+  •  Personalised Recommendations",
-    pdfFilename: "recommendations_nutricheck.pdf",
-    pdfDateLocale: "en-GB",
   },
 };
 
-const t = T[lang];
+const textToUse = TEXT[lang];
 
 // Update page-level text
-document.title = t.pageTitle;
-document.querySelector("h1").textContent = t.heading;
-document.querySelector("#resultado p").textContent = t.loading;
+document.title = textToUse.pageTitle;
+document.querySelector("h1").textContent = textToUse.heading;
+document.querySelector("#resultado p").textContent = textToUse.loading;
 
 // ── FACTOR DATA ───────────────────────────────────────────────────────────────
 
@@ -309,29 +287,31 @@ const factorsInfo = {
   },
 };
 
-const factors = factorsInfo[lang] || factorsInfo[PORTUGUESE];
+const factors = factorsInfo[lang];
 
 // ── BUILD UI ──────────────────────────────────────────────────────────────────
 
 const div = document.getElementById("resultado");
 let html = "";
 
+// no risks page
 if (riskFactors.length === 0) {
   html += `<div class="card">
-    <h2>${t.noRiskTitle}</h2>
-    <p>${t.noRiskP1}</p>
-    <p>${t.noRiskP2}</p>
-    <p>${t.noRiskP3}</p>
-    <p>${t.noRiskP4}</p>
-    <p>${t.noRiskP5}</p>
+    <h2>${textToUse.noRiskTitle}</h2>
+    <p>${textToUse.noRiskP1}</p>
+    <p><b>${textToUse.noRiskP2}</b></p>
+    <p>${textToUse.noRiskP3}</p>
+    <p><b>${textToUse.noRiskP4}</b></p>
+    <p><b>${textToUse.noRiskP5}</b></p>
   </div>`;
 }
 
+// some risks page
 if (riskFactors.length > 0) {
   html += `<div class="card">
-    <h2>${t.recTitle}</h2>
-    <h3>${t.recSubtitle}</h3>
-    <p><em>${t.recHint}</em></p>
+    <h2>${textToUse.recTitle}</h2>
+    <h3>${textToUse.recSubtitle}</h3>
+    <p><em>${textToUse.recHint}</em></p>
     <div class="cards-container">`;
 
   riskFactors.forEach((index) => {
@@ -345,11 +325,11 @@ if (riskFactors.length > 0) {
   html += `</div></div>`;
 
   html += `<div class="card">
-    <h2>${t.nextTitle}</h2>
-    <p>${t.nextP1}</p>
-    <p>${t.nextP2}</p>
-    <p>${t.nextP3}</p>
-    <p>${t.nextP4}</p>
+    <h2>${textToUse.nextTitle}</h2>
+    <p>${textToUse.nextP1}</p>
+    <p>${textToUse.nextP2}</p>
+    <p><b>${textToUse.nextP3}</b></p>
+    <p><b>${textToUse.nextLink}</b></p>
   </div>`;
 }
 
@@ -369,18 +349,18 @@ document.querySelectorAll(".clickable").forEach((card) => {
     let accordionHTML = "";
     info.todo.forEach((item, i) => {
       accordionHTML += `<div class="accordion-item active">
-                          <div class="accordion-header">${t.modalSuggestionLabel} ${i + 1}</div>
+                          <div class="accordion-header">${textToUse.modalSuggestionLabel} ${i + 1}</div>
                           <div class="accordion-content"><p>${item}</p></div>
                         </div>`;
     });
 
     const whyHTML = `<div class="accordion-item">
-                       <div class="accordion-header">${t.modalWhyLabel}</div>
+                       <div class="accordion-header">${textToUse.modalWhyLabel}</div>
                        <div class="accordion-content"><p>${info.why}</p></div>
                      </div>`;
 
     modalBody.innerHTML = `<h2>${info.icon} ${info.title}</h2>
-                           <h3>${t.modalDayLabel}</h3>
+                           <h3>${textToUse.modalDailyLabel}</h3>
                            ${accordionHTML}
                            ${whyHTML}`;
 
@@ -404,12 +384,12 @@ closeModal.addEventListener("click", closeModalFunc);
 window.addEventListener("click", (e) => { if (e.target === modal) closeModalFunc(); });
 window.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.classList.contains("show")) closeModalFunc(); });
 
-// ── PDF DOWNLOAD ──────────────────────────────────────────────────────────────
+// ── PDF DOWNLOAD BUTTON ───────────────────────────────────────────────────────
 
 if (riskFactors.length > 0) {
   const btn = document.createElement("button");
   btn.className = "download-btn";
-  btn.textContent = t.downloadBtn;
+  btn.textContent = textToUse.downloadBtn;
 
   const recomendacoesCard = document.querySelector("#resultado .card");
   recomendacoesCard.insertAdjacentElement("afterend", btn);
@@ -420,7 +400,7 @@ if (riskFactors.length > 0) {
 
     function onLoaded() {
       loaded++;
-      if (loaded === 3) generatePDF(wmImg, logoImg, capaImg);
+      if (loaded === 3) generatePDF(wmImg, logoImg, capaImg, lang, riskFactors, factors);
     }
 
     const _wm = new Image();
@@ -438,268 +418,4 @@ if (riskFactors.length > 0) {
     _capa.onerror = () => {                  onLoaded(); };
     _capa.src = IMAGES_FOLDER + "header_report.png";
   });
-
-  function generatePDF(wmImg, logoImg, capaImg) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ unit: "mm", format: "a4" });
-
-    const PAGE_W      = 210;
-    const PAGE_H      = 297;
-    const MARGIN      = 18;
-    const CONTENT_W   = PAGE_W - MARGIN * 2;
-    const FOOTER_H    = 10;
-    const SAFE_BOTTOM = PAGE_H - FOOTER_H - 4;
-    let y = 0;
-
-    const FS_SUGGESTION = 11;
-    const FS_WHY        = 8.5;
-    const FS_WHY_LABEL  = 10;
-    const LH = (fs) => fs * 0.3528 * 1.4;
-    const V_PAD        = 5;
-    const BASELINE_OFF = 3.5;
-
-    const GREEN       = [34, 139, 87];
-    const GREEN_DARK  = [26, 107, 42];
-    const GREEN_LIGHT = [236, 247, 241];
-    const YELLOW      = [245, 200, 0];
-    const GREY_DARK   = [40, 40, 40];
-    const GREY_MID    = [100, 100, 100];
-    const GREY_LIGHT  = [245, 245, 245];
-    const WHITE       = [255, 255, 255];
-
-    function drawWatermark() {
-      if (!wmImg) return;
-      doc.addImage(wmImg, "PNG", 0, 0, PAGE_W, PAGE_H);
-    }
-
-    function ensureFits(blockH) {
-      if (y + blockH > SAFE_BOTTOM) {
-        doc.addPage();
-        drawWatermark();
-        y = MARGIN;
-      }
-    }
-
-    function calcLines(text, fontSize, maxWidth) {
-      doc.setFontSize(fontSize);
-      return doc.splitTextToSize(text, maxWidth);
-    }
-
-    function filledRoundedRect(x, ry, w, h, r, color) {
-      doc.setFillColor(...color);
-      doc.roundedRect(x, ry, w, h, r, r, "F");
-    }
-
-    // ── PAGE 1: watermark + capa header ──
-    drawWatermark();
-
-    const CAPA_H = 55;
-    if (capaImg) {
-      doc.addImage(capaImg, "PNG", 0, 0, PAGE_W, CAPA_H);
-    } else {
-      doc.setFillColor(...GREEN_DARK);
-      doc.rect(0, 0, PAGE_W, CAPA_H, "F");
-      doc.setTextColor(...WHITE);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(26);
-      doc.text("NutriCheck+", PAGE_W / 2, CAPA_H / 2, { align: "center" });
-    }
-
-    doc.setFillColor(...YELLOW);
-    doc.rect(0, CAPA_H, PAGE_W, 1.5, "F");
-
-    y = CAPA_H + 15;
-    doc.setTextColor(...GREEN_DARK);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text(t.pdfSubtitle, MARGIN, y);
-    y += 6;
-
-    const today = new Date().toLocaleDateString(t.pdfDateLocale, {
-      day: "2-digit", month: "long", year: "numeric",
-    });
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    doc.setTextColor(...GREY_MID);
-    doc.text(today, MARGIN, y);
-    y += 10;
-
-    // Intro
-    const introLines = calcLines(t.pdfIntro, 9, CONTENT_W);
-    doc.setTextColor(...GREY_MID);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    doc.text(introLines, MARGIN, y);
-    y += introLines.length * LH(9) + 8;
-
-    // Risk factors
-    riskFactors.forEach((index) => {
-      const info = factors[index];
-
-      const TITLE_BAR_H = 16;
-      const LABEL_H     = 10;
-
-      const suggBlocks = info.todo.map((item) => {
-        const lines = calcLines(item, FS_SUGGESTION, CONTENT_W - 14);
-        const boxH  = V_PAD + lines.length * LH(FS_SUGGESTION) + V_PAD;
-        return { lines, boxH };
-      });
-
-      const whyLines = calcLines(info.why, FS_WHY, CONTENT_W - 8);
-      const whyBoxH  = V_PAD + LH(FS_WHY_LABEL) + 1 + whyLines.length * LH(FS_WHY) + V_PAD;
-
-      const minH = TITLE_BAR_H + LABEL_H + suggBlocks[0].boxH + 3;
-      ensureFits(minH);
-
-      // Title bar
-      filledRoundedRect(MARGIN - 4, y - 2, CONTENT_W + 8, 12, 3, GREEN);
-      doc.setTextColor(...WHITE);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.text(info.title, MARGIN + 1, y + 6);
-      y += TITLE_BAR_H + 3;
-
-      // Label
-      doc.setTextColor(...GREY_DARK);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      doc.text(t.pdfDayLabel, MARGIN, y);
-      y += LABEL_H - 2;
-
-      // Suggestion boxes
-      suggBlocks.forEach(({ lines, boxH }) => {
-        ensureFits(boxH + 3);
-        const rectY = y;
-        filledRoundedRect(MARGIN, rectY, CONTENT_W, boxH, 2, GREY_LIGHT);
-        doc.setFillColor(...GREEN);
-        doc.circle(MARGIN + 5, rectY + boxH / 2, 2, "F");
-        doc.setTextColor(...GREY_DARK);
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(FS_SUGGESTION);
-        doc.text(lines, MARGIN + 11, rectY + V_PAD + BASELINE_OFF);
-        y += boxH + 3;
-      });
-
-      y += 3;
-
-      // "Why it matters" box
-      ensureFits(whyBoxH + 4);
-      filledRoundedRect(MARGIN, y, CONTENT_W, whyBoxH, 2, GREEN_LIGHT);
-      doc.setTextColor(...GREEN);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(FS_WHY_LABEL);
-      doc.text(t.pdfWhyLabel, MARGIN + 4, y + V_PAD + BASELINE_OFF);
-      doc.setTextColor(...GREY_MID);
-      doc.setFont("helvetica", "italic");
-      doc.setFontSize(FS_WHY);
-      doc.text(whyLines, MARGIN + 4, y + V_PAD + BASELINE_OFF + LH(FS_WHY_LABEL) + 1);
-      y += whyBoxH + 10;
-    });
-
-    // ── "Next Step" section ──
-    const ns1 = calcLines(t.pdfNext1, 9, CONTENT_W - 12);
-    const ns2 = calcLines(t.pdfNext2, 9, CONTENT_W - 12);
-    const ns3 = calcLines(t.pdfNext3, 9, CONTENT_W - 12);
-    const ns4 = calcLines(t.pdfNext4, 9, CONTENT_W - 12);
-
-    const nsBoxH = V_PAD + LH(12) + 4
-      + ns1.length * LH(9) + 4
-      + ns2.length * LH(9) + 4
-      + ns3.length * LH(9) + 4
-      + ns4.length * LH(9)
-      + V_PAD;
-
-    ensureFits(nsBoxH + 4);
-
-    filledRoundedRect(MARGIN, y, CONTENT_W, nsBoxH, 3, GREEN_LIGHT);
-    doc.setFillColor(...GREEN_DARK);
-    doc.rect(MARGIN, y, 3, nsBoxH, "F");
-
-    let ny = y + V_PAD;
-
-    doc.setTextColor(...GREEN_DARK);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.text(t.pdfNextTitle, MARGIN + 8, ny + BASELINE_OFF);
-    ny += LH(12) + 4;
-
-    doc.setTextColor(...GREY_DARK);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    doc.text(ns1, MARGIN + 8, ny + BASELINE_OFF);
-    ny += ns1.length * LH(9) + 4;
-
-    doc.text(ns2, MARGIN + 8, ny + BASELINE_OFF);
-    ny += ns2.length * LH(9) + 4;
-
-    doc.setFont("helvetica", "bold");
-    doc.text(ns3, MARGIN + 8, ny + BASELINE_OFF);
-    ny += ns3.length * LH(9) + 4;
-
-    // Escreve todas as linhas menos a última
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(...GREY_DARK);
-    ns4.slice(0, -1).forEach((line, i) => {
-      doc.text(line, MARGIN + 8, ny + i * LH(9) + BASELINE_OFF);
-    });
-
-    // Linha por linha, detectando link corretamente
-    doc.setFont("helvetica", "bold");
-    let nyLine = ny;
-    ns4.forEach((line) => {
-      let x = MARGIN + 8;
-
-      if (line.includes(ENGLISH_LINK) || line.includes(PORTUGUESE_LINK)) {
-        const link = isEN ? ENGLISH_LINK : PORTUGUESE_LINK;
-        const parts = line.split(link);
-
-        // Parte antes do link
-        if (parts[0]) {
-          doc.setTextColor(...GREY_DARK);
-          doc.text(parts[0], x, nyLine + BASELINE_OFF);
-          x += doc.getTextWidth(parts[0]);
-        }
-
-        // Link
-        doc.setTextColor(0, 0, 255);
-        doc.text(link, x, nyLine + BASELINE_OFF);
-        const linkW = doc.getTextWidth(link);
-        doc.setDrawColor(0, 0, 255);
-        doc.setLineWidth(0.5);
-        doc.line(x, nyLine + BASELINE_OFF + 1, x + linkW, nyLine + BASELINE_OFF + 1);
-        x += linkW;
-
-        // Parte depois do link
-        if (parts[1]) {
-          doc.setTextColor(...GREY_DARK);
-          doc.text(parts[1], x, nyLine + BASELINE_OFF);
-        }
-      } else {
-        // Linha normal
-        doc.setTextColor(...GREY_DARK);
-        doc.text(line, x, nyLine + BASELINE_OFF);
-      }
-
-      nyLine += LH(9);
-    });
-
-    y += nsBoxH + 10;
-
-    // ── Footer on every page ──
-    const pageCount = doc.getNumberOfPages();
-    for (let p = 1; p <= pageCount; p++) {
-      doc.setPage(p);
-      doc.setFillColor(...GREEN_DARK);
-      doc.rect(0, PAGE_H - FOOTER_H, PAGE_W, FOOTER_H, "F");
-      doc.setFillColor(...YELLOW);
-      doc.rect(0, PAGE_H - FOOTER_H, PAGE_W, 1, "F");
-      doc.setTextColor(...WHITE);
-      doc.setFontSize(7);
-      doc.setFont("helvetica", "normal");
-      doc.text(t.pdfFooter, MARGIN, PAGE_H - 4);
-      doc.text(`${p} / ${pageCount}`, PAGE_W - MARGIN, PAGE_H - 4, { align: "right" });
-    }
-
-    doc.save(t.pdfFilename);
-  }
 }
