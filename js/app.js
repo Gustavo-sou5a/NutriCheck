@@ -2,6 +2,7 @@ const ENGLISH_LINK = "https://tally.so/r/7Ro4B9";
 const PORTUGUESE_LINK = "https://tally.so/r/dWPqGq";
 const ENGLISH = "eng";
 const PORTUGUESE = "pt";
+const IMAGES_FOLDER = "../assets/"
 
 // Função para ler parâmetros da URL
 function getParam(name) {
@@ -131,7 +132,7 @@ const T = {
   },
 };
 
-const t = T[lang] || T[PORTUGUESE];
+const t = T[lang];
 
 // Update page-level text
 document.title = t.pageTitle;
@@ -425,17 +426,17 @@ if (riskFactors.length > 0) {
     const _wm = new Image();
     _wm.onload  = () => { wmImg = _wm;   onLoaded(); };
     _wm.onerror = () => {                 onLoaded(); };
-    _wm.src = "capa_watermark.png";
+    _wm.src = IMAGES_FOLDER + "background_report.png";
 
     const _logo = new Image();
     _logo.onload  = () => { logoImg = _logo; onLoaded(); };
     _logo.onerror = () => {                  onLoaded(); };
-    _logo.src = "logo.png";
+    _logo.src = IMAGES_FOLDER + "logo.png";
 
     const _capa = new Image();
     _capa.onload  = () => { capaImg = _capa; onLoaded(); };
     _capa.onerror = () => {                  onLoaded(); };
-    _capa.src = "capa_cortada.png";
+    _capa.src = IMAGES_FOLDER + "header_report.png";
   });
 
   function generatePDF(wmImg, logoImg, capaImg) {
