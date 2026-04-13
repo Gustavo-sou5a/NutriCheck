@@ -1,10 +1,8 @@
-import { COMMON_TEXT, ENGLISH_LINK, PORTUGUESE_LINK } from "./translations/common.js";
+import { PDF_TEXT, FACTORS_INFO, ENGLISH_LINK, PORTUGUESE_LINK } from "./translations/text.js";
 
 // ── PDF GENERATION ────────────────────────────────────────────────────────────
-// Depende das variáveis globais definidas em app.js:
-//   t, riskFactors, factors, isEN, ENGLISH_LINK, PORTUGUESE_LINK
 
-export default function generatePDF(wmImg, logoImg, capaImg, lang, riskFactors, factors) {
+export default function generatePDF(wmImg, capaImg, lang, riskFactors, factors) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const ENGLISH = "eng";
@@ -36,38 +34,6 @@ export default function generatePDF(wmImg, logoImg, capaImg, lang, riskFactors, 
   const GREY_MID    = [100, 100, 100];
   const GREY_LIGHT  = [245, 245, 245];
   const WHITE       = [255, 255, 255];
-
-  const PDF_TEXT = {
-    pt: {
-      subtitle: "As suas recomendações personalizadas",
-      intro: "As recomendações abaixo foram selecionadas com base nas suas respostas e representam as áreas com maior potencial de melhoria. Não precisa de mudar tudo de uma vez — comece por uma ou duas prioridades.",
-      dayLabel: "O que pode fazer no dia a dia:",
-      whyLabel: "Porque é importante:",
-      nextTitle: COMMON_TEXT.pt.nextTitle,
-      nextP1: COMMON_TEXT.pt.nextP1,
-      nextP2: COMMON_TEXT.pt.nextP2,
-      nextP3: COMMON_TEXT.pt.nextP3,
-      nextLink: `Partilhe este questionário com alguém importante para si e que queira cuidar, através do link: ${PORTUGUESE_LINK}`,
-      footer: "NutriCheck+  •  Recomendações Personalizadas",
-      filename: "recomendacoes_nutricheck.pdf",
-      dateLocale: "pt-PT",
-    },
-    
-    eng:{
-      subtitle: "Your personalised recommendations",
-      intro: "The recommendations below were selected based on your answers and represent the areas with the greatest potential for improvement. You don't need to change everything at once — start with one or two priorities.",
-      dayLabel: "What you can do every day:",
-      whyLabel: "Why it matters:",
-      nextTitle: COMMON_TEXT.eng.nextTitle,
-      nextP1: COMMON_TEXT.eng.nextP1,
-      nextP2: COMMON_TEXT.eng.nextP2,
-      nextP3: COMMON_TEXT.eng.nextP3,
-      nextLink: `Share this questionnaire with someone you care about, using the link: ${ENGLISH_LINK}`,
-      footer: "NutriCheck+  •  Personalised Recommendations",
-      filename: "recommendations_nutricheck.pdf",
-      dateLocale: "en-GB",
-    },
-  };
 
   const t = PDF_TEXT[lang]
 
