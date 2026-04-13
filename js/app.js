@@ -154,22 +154,17 @@ if (riskFactors.length > 0) {
 
   btn.addEventListener("click", () => {
     let loaded = 0;
-    let wmImg = null, logoImg = null, capaImg = null;
+    let wmImg = null, capaImg = null;
 
     function onLoaded() {
       loaded++;
-      if (loaded === 3) generatePDF(wmImg, capaImg, lang, riskFactors, factors);
+      if (loaded === 2) generatePDF(wmImg, capaImg, lang, riskFactors, factors);
     }
 
     const _wm = new Image();
     _wm.onload  = () => { wmImg = _wm;   onLoaded(); };
     _wm.onerror = () => {                 onLoaded(); };
     _wm.src = IMAGES_FOLDER + "background_report.png";
-
-    const _logo = new Image();
-    _logo.onload  = () => { logoImg = _logo; onLoaded(); };
-    _logo.onerror = () => {                  onLoaded(); };
-    _logo.src = IMAGES_FOLDER + "logo.png";
 
     const _capa = new Image();
     _capa.onload  = () => { capaImg = _capa; onLoaded(); };
